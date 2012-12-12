@@ -1,0 +1,10 @@
+http://www.linuxhispano.net/2010/06/08/bash-manual-referencia-cheat-sheet-mini/
+
+http://www.linux-es.org/node/31
+
+http://enavas.blogspot.com/2008/02/el-shell-de-linux-comando-cut.html
+
+http://www.esdebian.org/foro/24937/problemas-concatenar-cadenas-bash
+
+http://www.linux-es.org/node/147
+

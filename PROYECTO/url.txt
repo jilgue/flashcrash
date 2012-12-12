@@ -1,0 +1,14 @@
+http://www.ssddfj.org/papers/SSDDFJ_V1_1_Breeuwsma_et_al.pdf
+http://www.theosecurity.com/pdf/Fiorillo.pdf
+
+La documentaciÃ³n sobre el Arduino estÃ¡ en:
+
+http://arduino.cc/en/
+
+list of tools
+http://www.caine-live.net/page11/page11.html
+
+http://www.estrellateyarde.org/equiv/seguridad/recuperar-datos/recuperacion-de-datos-en-linux
+
+script
+http://aurea.es/2002/01/18/scripts-en-linux/

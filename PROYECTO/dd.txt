@@ -1,0 +1,25 @@
+comando dd
+
+monitorizar http://ubuntulife.wordpress.com/2009/05/25/tip-monitorizar-el-progreso-del-comando-dd/
+		watch -n 10 killall -USR1 dd
+
+
+    # dd if=/dev/zero of=/dev/hda bs=512 count=1
+
+Copiara ceros a (limpiará) nuestro MBR (Master Boot Record). Mientras que
+
+    # dd if=/dev/zero of=/dev/hda bs=446 count=1
+
+Limpiara el sector de datos del MBR pero dejara la tabla de particiones intacta. Esto es útil para borrar el GRUB (o Lilo) sin que corran riesgo las particiones.
+
+-"BS" es el tamaño en bytes de los bloques de archivos que leerá antes de escribirlos.
+-"COUNT" es la cantidad de bloques de tamaño especificado en BS que queremos que copie. 
+O sea, si tenemos bs=1024 y count=3, copiará 3 kilobytes en 3 veces
+
+
+    for n in {1..7}; do dd if=/dev/urandom of=/dev/sda bs=8b conv=notrunc; done
+
+.. nos llenará el disco rígido con caracteres al azar siete veces
+
+http://en.wikipedia.org/wiki/Dd_%28Unix%29
+http://www.linuxquestions.org/questions/linux-newbie-8/learn-the-dd-command-362506/

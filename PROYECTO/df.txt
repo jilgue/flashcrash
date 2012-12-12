@@ -1,0 +1,9 @@
+usb montando en /mnt/usb
+
+# df -h
+S.ficheros          Tamaño Usado  Disp Uso% Montado en
+/dev/sdb1             3,8G  4,0K  3,8G   1% /mnt/usb
+
+#df
+S.ficheros         Bloques de 1K   Usado    Dispon Uso% Montado en
+/dev/sdb1              3907392         4   3907388   1% /mnt/usb

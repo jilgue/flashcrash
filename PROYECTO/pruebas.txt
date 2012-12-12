@@ -1,0 +1,86 @@
+pruebas:
+
+dd if=/dev/urandom of=/dev/sdb1 bs=1M count=1024
+455+0 registros le?dos
+454+0 registros escritos
+476053504 bytes (476 MB) copiados, 107,352 s, 4,4 MB/s
+498+0 registros le?dos
+497+0 registros escritos
+521142272 bytes (521 MB) copiados, 117,514 s, 4,4 MB/s
+540+0 registros le?dos
+539+0 registros escritos
+565182464 bytes (565 MB) copiados, 127,432 s, 4,4 MB/s
+583+0 registros le?dos
+582+0 registros escritos
+610271232 bytes (610 MB) copiados, 137,597 s, 4,4 MB/s
+625+0 registros le?dos
+624+0 registros escritos
+654311424 bytes (654 MB) copiados, 147,515 s, 4,4 MB/s
+667+0 registros le?dos
+666+0 registros escritos
+698351616 bytes (698 MB) copiados, 157,444 s, 4,4 MB/s
+710+0 registros le?dos
+709+0 registros escritos
+743440384 bytes (743 MB) copiados, 167,595 s, 4,4 MB/s
+752+0 registros le?dos
+751+0 registros escritos
+787480576 bytes (787 MB) copiados, 177,487 s, 4,4 MB/s
+793+0 registros le?dos
+792+0 registros escritos
+830472192 bytes (830 MB) copiados, 187,578 s, 4,4 MB/s
+834+0 registros le?dos
+833+0 registros escritos
+873463808 bytes (873 MB) copiados, 197,582 s, 4,4 MB/s
+876+0 registros le?dos
+875+0 registros escritos
+917504000 bytes (918 MB) copiados, 207,513 s, 4,4 MB/s
+918+0 registros le?dos
+917+0 registros escritos
+961544192 bytes (962 MB) copiados, 217,45 s, 4,4 MB/s
+961+0 registros le?dos
+960+0 registros escritos
+1006632960 bytes (1,0 GB) copiados, 227,62 s, 4,4 MB/s
+1003+0 registros le?dos
+1002+0 registros escritos
+1050673152 bytes (1,1 GB) copiados, 237,547 s, 4,4 MB/s
+1024+0 registros le?dos
+1024+0 registros escritos
+1073741824 bytes (1,1 GB) copiados, 245,949 s, 4,4 MB/s
+
+mount -f /dev/sdb1 /mnt/usb
+
+df -h
+/dev/sdb1              30G   27G  3,5G  89% /mnt/usb
+
+df
+/dev/sdb1             31456316  27804284   3652032  89% /mnt/usb
+
+fdisc /dev/sdb1
+Disco /dev/sdb1: 4009 MB, 4009001472 bytes
+124 heads, 62 sectors/track, 1018 cylinders, 7830081 sectores en total
+Units = sectores of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Identificador del disco: 0xfdd6eb35
+
+
+
+fdisk /dev/sdb 
+
+Orden (m para obtener ayuda): p
+
+Disco /dev/sdb: 4009 MB, 4009754624 bytes
+32 heads, 63 sectors/track, 3884 cylinders, 7831552 sectores en total
+Units = sectores of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Identificador del disco: 0x478213a0
+
+Disposit. Inicio    Comienzo      Fin      Bloques  Id  Sistema
+/dev/sdb1   *          63     7830143     3915040+   b  W95 FAT32
+
+
+mkfs.vfat /dev/sdb1
+
+df -h
+/dev/sdb1             3,8G  4,0K  3,8G   1% /mnt/usb
