@@ -1,7 +1,7 @@
 df --block-size=KiB | grep sdb1 > tam.txt
 tam_final=$(cut -c56-63 tam.txt)
 echo $tam_final
-((valor_final=tam_final-1))
+((valor_final=tam_final-6))
 ((valor_final_bits=valor_final*1024))
 echo "valor final" $valor_final_bits
 final_binario=$(echo "obase=2; $valor_final_bits"| bc)
