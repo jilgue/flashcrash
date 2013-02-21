@@ -1,9 +1,9 @@
 rm stam.txt	
-for (( b=0 ; b<10 ;b++))
+for (( b=0 ; b<1 ;b++))
 do
 	let vueltas=$b
 
-for (( a=1 ; a<2 ; a++ ))
+for (( a=1 ; a<6 ; a++ ))
 do
 	echo "numero serie ${b}_${a}"
 	echo -e -n "numero serie ${b}_${a}" > datos/${b}_${a}datos.txt

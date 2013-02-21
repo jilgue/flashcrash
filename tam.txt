@@ -1,1 +1,1 @@
-/dev/sdb1                       3908124KiB        4KiB  3908120KiB   1% /media/SIN TITULO
+/dev/sdb1                       4001919kB  4001915kB         5kB 100% /media/SIN TITULO
