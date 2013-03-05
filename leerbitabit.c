@@ -21,7 +21,7 @@ void main(){
 		temp2 = getc(archivo2);
 		if(temp!=temp2)
 		{
-			printf("%i\t%i\n",temp,temp2);
+			printf("%x\t%x\n",temp,temp2);
 		}
 	}
 }
