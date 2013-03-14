@@ -1,5 +1,5 @@
 rm stam.txt	
-for (( b=0 ; b<10 ;b++))
+for (( b=0 ; b<999999999999999999999999 ;b++))
 do
 	let vueltas=$b
 
@@ -15,7 +15,7 @@ done
 
 rm -f /media/SIN\ TITULO/*datos.txt
 
-df --block-size=KB | grep sdb1 > tam.txt
+df --block-size=KB | grep sdd1 > tam.txt
 cut -c32-52 tam.txt >> stam.txt
 
 frase="vuelta "
