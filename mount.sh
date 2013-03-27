@@ -1,6 +1,5 @@
 rm md5.txt
 
-#for a in $(seq 9999);
 for (( a=1 ; a<999999999999999 ; a++ ))
 do
 	sudo umount /media/usb0
