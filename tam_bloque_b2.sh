@@ -1,4 +1,5 @@
-((valor_final=3907388-8))
+((valor_final=3907388*3))
+((valor_final=3907388/4))
 ((valor_final_bits=valor_final*1024))
 echo "valor final" $valor_final_bits
 final_binario=$(echo "obase=2; $valor_final_bits"| bc)
