@@ -1,0 +1,1 @@
+/dev/sdc1            4001170kB 2001507kB 1999664kB  51% /media/usb0
