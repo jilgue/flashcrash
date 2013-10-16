@@ -16,11 +16,15 @@ done
 
 dd if=/dev/sdc1 of=copias/${b}.iso
 
+echo "vuelta ${b}" >> diff.txt
+
 if (($b != 0 ))
 then
 ((c=b-1))
 cmp -l copias/${b}.iso copias/${c}.iso >> diff.txt
 fi
+
+echo "" >> diff.txt
 
 rm -f /media/usb0/*datos.txt
 
