@@ -1,4 +1,4 @@
-valor_final=3907392
+valor_final=8
 ((tamfinal=valor_final*1024))
 
 aux=2
@@ -12,7 +12,7 @@ done
 echo "auxiliar" $aux
 echo "contado" $cont
 
-echo -e -n "\xBB" > datos2/datos0.txt
+echo -e -n "\xCC" > datos2/datos0.txt
 
 ((aux=cont))
 
