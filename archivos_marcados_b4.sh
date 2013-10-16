@@ -1,5 +1,5 @@
-#tamfinal=3907392000
-tamfinal=8192
+valor_final=3907392
+((tamfinal=valor_final*1024))
 
 aux=2
 cont=0
