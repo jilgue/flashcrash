@@ -1,4 +1,4 @@
-((valor_final=1952796*3))
+((valor_final=3907388))
 #((valor_final=3907388/4))
 ((valor_final_bits=valor_final*1024))
 echo "valor final" $valor_final_bits
