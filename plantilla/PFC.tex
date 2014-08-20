@@ -26,20 +26,20 @@
 \usepackage{fancyhdr}                                   %Para un encabezado especial más visual
 \usepackage{extramarks}
 
-\author{Autor 2 \and Autor 1}
+\author{César Martín Cristóbal}
 \title{\textbf{\Huge{MEDIDA}}}
 %-----------------------------------------------------------------------------------------------
 %-----------------------------------------------------------------------------------------------
 \begin{document}%%%Aquí empieza el documento%%%
 
-\input{portada/port.tex}%Portada Gráfica
+%\input{portada/port.tex}%Portada Gráfica
 
-\DeclareGraphicsExtensions{.jpg,.pdf,.mps,.png,.gif,.fig,.bmp}
+\DeclareGraphicsExtensions{.jpg,.pdf,.mps,.png,.gif,.fig,.bmp,.PNG}
 %Declaración de extensiones de figuras para el paquete graphicx
 
-\renewcommand\tablename{Tabla}%De esta forma sale nombre de Tabla en vez de Cuadro
-\renewcommand\listfigurename{Lista de Figuras}
-\renewcommand\listtablename{Lista de Tablas}
+%\renewcommand\tablename{Tabla}%De esta forma sale nombre de Tabla en vez de Cuadro
+%\renewcommand\listfigurename{Lista de Figuras}
+%\renewcommand\listtablename{Lista de Tablas}
 
 \thispagestyle{empty} \cleardoublepage
 %Se deja sin numeración las páginas siguiente
@@ -60,13 +60,6 @@
 \newpage
 \thispagestyle{empty}\cleardoublepage
 
-%==============================================================
-%Cita
-%==============================================================
-\thispagestyle{plain}
-\input{Cita/Cita}
-\newpage
-\thispagestyle{empty}\cleardoublepage
 %==============================================================
 %Resumen
 %==============================================================
@@ -99,18 +92,6 @@
 %=============================================================
 
 \include{capitulo1/capitulo1}
-\include{capitulo2/capitulo2}
-
-%============================================================
-%   Apéndices
-%============================================================
-\renewcommand{\appendixtocname}{APÉNDICES}%Cambia el nombre de toc para apéndices
-\renewcommand{\appendixpagename}{APÉNDICES}%Cambia el nombre para la página
-\renewcommand{\appendixname}{APÉNDICE}
-\appendix
-\appendixpage
-\addappheadtotoc
-\input{Presupuesto/Presupuesto}
 
 %------------------------------------------------------------
 %          Bibliografia
