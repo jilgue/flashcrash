@@ -1,0 +1,42 @@
+\chapter{Antecedentes}
+\section{Estado del arte}
+\subsection{Características de la memoria}
+
+Tamaño de cluster que impone fat32 \cite{fat32_1} \cite{fat32_2}
+
+\subsection{Descripción de equipos}
+Para poder realizar los experimentos hemos contado con dos equipos en el laboratorio. Son dos equipos con procesador AMD Phenom (tm) X6 1055T, con 7'6 GiB de RAM. En los que hemos instalado Debian 6.0.6, que viene con el kernel 2.6.32-5-amd64.
+
+Ambos dos forman parte de una red interna de \url{gf.tel.uva.es}, teniendo cada uno de ellos los siguientes hostnames:
+\begin{itemize}
+\item Leonardo, con la IP: 192.168.0.50.
+\item Donatello, con la IP: 192.168.0.51.
+\end{itemize}
+
+Como esta red no está accesible desde el exterior de la escuela, para poder trabajar desde casa y tener monitorizado los experimentos, hemos recurrido a los tuneles ssh y al commando screen de Linux, que detallamo en la siguiente sección \ref{subsec:ComoTrabajarDesdeFueraETSiT}.
+
+\section{Utilidades}
+
+\subsection{Comandos y herramientas utilizadas}
+
+  - Comprar archivos: hexdump -c .iso > .txt -> comparar con meld
+  - dd: bloques default 1024bytes
+  - df --block-size=kB -> 1000, k -> 1024
+  - cmp -l
+  - diff
+  - du -k == --block-size=1k == df
+  - tail
+  - cat
+  - screen: ctrl-a + d salir, screen -r entrar
+  - iotop
+  - ls -l | wc -l (contar elementos)
+  - od -x 1.txt muestra en hex
+[1] [2]
+
+\subsection{¿Comó trabajar desde fuera de la ETSiT?}
+\label{subsec:ComoTrabajarDesdeFueraETSiT}
+Se puede tardar días en conseguir resultados, para monitorizar el proceso es necesario conectarse a los equipos y poder recuperar la shell donde lanzamos el script.
+http://dev.callepuzzle.com/uso-de-tuneles-ssh-y-screen/
+
+[1] (man de linux)
+[2] Programación de Shell Scripts, Alberto Luna Fernández y Pablo Sanz Mercado, 
