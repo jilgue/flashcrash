@@ -1,10 +1,8 @@
 \chapter{Introducción}
 
-En este capítulo se hará una breve exposición sobre el proyecto final de carrera.
+En este proyecto de final de carrera, tiene como objetivo el estudio del comportamiento de las memorias Flash cuando ... ¿Por qué son tan importantes este tipo de memorias? 
 
-un poco de bla bla bla bla bla
-
-Empezaremos con una introducción a la tegnología Flash.
+Existen multitud de dispositivos que usamos en nuestro día a día que usan este tipo de tecnología. Tanto de uso de general, como puede ser, ordenadores portátiles, discos de estado solido (SSD), tablets, sistemas de posicionamiento global (GPS), reproductores de música, cámaras digitales, teléfonos móviles, instrumentos musicales electrónicos, decodificadores de televisión, etc. Además de en otras muchas aplicaciones industriales, como sistemas de seguridad, productos de redes y comunicación, productos de administración de ventas (lectores portátiles) o sistemas militares \cite{GuíaProductosMemoriaFlash}.
 
 \section{¿Qué son las memorias Flash?}
 
@@ -12,27 +10,61 @@ La memoria flash es una evolución de la memoria EEPROM, permite la lectura y esc
 
 Utiliza una tecnología de almacenamiento que mediante impulsos eléctricos es capaz de leer, escribir o borrar información. Estas memorias están basadas en transistores de puerta flotante colocados formando celdas. El elemento básico de funcionamiento de las memorias son los transistores MOS de puerta-flotante \cite{IntroductionFlash}.
 
-Fujio Masuoka en 1984 inventó este tipo de memoria como evolución de las EEPROM existentes por aquel entonces, mientras trabajaba en Toshiba. Intel intentó atribuirse la creación de esta sin éxito, aunque si comercializó la primera memoria flash de uso común en 1988 [2].
+Fujio Masuoka en 1984 inventó este tipo de memoria como evolución de las EEPROM existentes por aquel entonces, mientras trabajaba en Toshiba. Intel intentó atribuirse la creación de esta sin éxito, aunque si comercializó la primera memoria flash de uso común en 1988 \cite{FlashMemoryWikipedia}.
 
 Se dividen en dos clases según el tipo de puertas usado en su fabricación:
 \begin{itemize}
-  \item NAND: diseñadas con unas celdas muy pequeñas, que permiten tener un precio muy pequeño por bit de almacenamiento.
-  \item NOR: típicamente se han usado para almacenar el software que luego es ejecutado en los dispositivos portátiles.
+  \item NOR: típicamente se han usado para almacenar el software que luego es ejecutado en los dispositivos portátiles. Ya que proporciona capacidades de acceso aleatorio de alta velocidad, pudiendo leer y escribir datos en lugares específicos de la memoria sin tener que acceder a la memoria en modo secuencial. A diferencia de la memoria Flash NAND, la memoria Flash NOR permite la recuperación de datos desde un solo byte. La memoria Flash NOR es excelente en aplicaciones donde los datos se recuperan o se escriben de manera aleatoria. Se encuentra integrada en teléfonos móviles (para almacenar el sistema operativo), y también se utiliza en los ordenadores para almacenar el programa BIOS que se ejecuta en el arranque.
+  \item NAND: fue inventada después de la NOR. Diseñadas con unas celdas muy pequeñas, que permiten tener un precio muy pequeño por bit de almacenamiento, por eso se encuentra comúnmente en unidades de disco duro de estado sólido y unidades de almacenamiento. La memoria Flash NAND lee y escribe a alta velocidad, en modo secuencial, manejando datos en bloques de tamaño pequeño. La memoria Flash NAND puede recuperar o escribir datos como páginas únicas, pero no puede recuperar bytes individuales como la memoria Flash NOR. La memoria Flash NAND es más económica que la memoria Flash NOR y puede guardar mayor capacidad de datos almacenados en el mismo tamaño de bloque \ref{fig:comparacionNORNAN} \cite{GuíaProductosMemoriaFlash}.
 \end{itemize}
-En la actualidad la diferencia entre los dos tipos es cada vez menor \cite{FlashMemoryWikipedia}.
 
-
-Que mierda pasa con el lineado !!!
-
-asdfa
-
-adfa
-ads
-adf
-
+En lo que consumo energético se refiere, algo bastante importante dependiendo del dispositivo, es algo menor en las NAND cuando son usadas en aplicaciones que tiene mucha carga de escritura. Sin embargo el consumo instantaneo sin demasiada carga de trabajo es bastante parecido entre los dos tipos de memorias \cite{NANDvsNORFlashMemory}.
 
 \begin{figure}
 	\centering
 		\includegraphics[width=0.60\textwidth,natwidth=610,natheight=642]{fig/comparacionNORNAN}
-	\caption{\emph{Diferencia entre Flash NOR y NAND}}
+	\caption{\emph{Diferencia entre Flash NOR y NAND \cite{NANDvsNORFlashMemory}}}
+        \label{fig:comparacionNORNAN}
 \end{figure}
+
+En la actualidad la diferencia entre los dos tipos es cada vez menor \cite{NANDvsNORFlashMemory} \cite{FlashMemoryWikipedia}.
+
+(características de la memoria utilizada por encima, con mas profundidad sig cap)
+
+El futuro de la memoria flash: (encontrar tipo de memoria usada en movil tablet), [3] (enlazar este cacho de ssd con motivación), uso de flash como RAM [4].
+http://www.convertronic.net/Microcontroladores/serie-de-microcontroladores-de-ultra-bajo-consumo-de-energia-rh850f1x-chip-de-memoria-flash-de-40-nm-para-aplicaciones-en-automocion.html
+
+\section{Motivación}
+
+Como hemos visto anteriormente, el uso de las memorias Flash está bastante extendido. La sociedad demanda dispositivos más pequeños y rápidos, y las memorias Flash se adaptan a estas necesidades. Ha habido una creciente implantación en portátiles conforme el precio de las mismas ha ido disminuyendo \ref{fig:US-SSD-Price} \cite{priceSSDEvolution}. 
+
+\begin{figure}
+	\centering
+		\includegraphics[width=0.60\textwidth,natwidth=610,natheight=642]{fig/US-SSD-Price}
+	\caption{\emph{Evolución de los precios de los discos SSD \cite{priceSSDEvolution}}}
+        \label{fig:US-SSD-Price}
+\end{figure}
+
+Además esta tecnología supone un ahorro energético, algo también muy importante en dispotivos móviles o portables. Un artículo  \cite{SSDonBatteryLife}.
+
+De momento solo hemos contado las virtudes de esta tecnología, pero las memorias Flash tienen un problema: cada bloque de memoría soporta unos ciclos de escritura/borrado. Nadie quiere estar haciendo fotos con su cámara digital y que un buen día haya fotos que se pierdan, o comprarse un disco SSD de una capacidad y que después de un tiempo esa capacidad se haya visto reducida sensiblemente. Todo esto nos hace plantearnos las siguientes pregutas: ¿qué pasa cuando se usa más veces de las soportadas?, ¿cuántos ciclos son los realmente soportados?, ¿qué información queda si un bloque se rompe?, y, ¿se puede recuperar la información que había?.
+
+También se debe indicar que en algunos dispositivos, como las memorias USB, el chip donde se almacenan los datos se ve acompañado de un controlador, que procesará los datos en la lectura y la escritura. La presencia de este chip supondrá un problema añadido porque existirá una diferencia entre los datos que se ven al utilizar el dispositivo con normalidad, procesados por controlador, y los datos presentes en el chip de memoria \cite{ArchitectureForuniversal}.
+
+En este proyecto hemos tratado de profundizar sobre funcionamiento de las memorias flash, sobre todo en lo que se refiere al funcionamiento interno, a bajo nivel, pero sin entrar en el hardware. En qué posiciones de memoria guarda la tabla de nombres, cómo gestiona los archivos, cúal es el tamaño que tiene un sector, cuantos ciclos de vida útil tiene un sector y qué información queda cuando un sector se deteriora.
+
+Para ello hemos realizado varios experiementos, los cuales detallamos en el Capítulo 4.
+
+\section{Objetivos}
+
+\begin{itemize}
+\item Determinar el tamaño de sector en hardware y software
+\item Determinar como funciona la tabla de nombre
+\item Si se recolocan para salvaguardar los sectores ?
+  \begin{itemize}
+  \item Un borrado implica cambios "fisicos" ?¿
+  \item Si el montar y desmontar un dispositivo implica el movimiento de datos
+  \end{itemize}
+\item Determinar la vida util (ciclos de vida) de un sector
+\item Ver que información queda despues de un sector roto.
+\end{itemize}
