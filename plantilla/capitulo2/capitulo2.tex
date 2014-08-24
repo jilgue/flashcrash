@@ -42,10 +42,10 @@ SSH es un protocolo de shell remota segura. Gracias a ello podemos conectarnos a
 
 SSH usa una autenticación con cable publico/privada. Si queremos conectarnos por ssh sin tener que escribir la contraseña cada vez, tenemos que generar una pareja de claves y añadir la publica a nuestro servidor:
 \begin{verbatim}
-ssh-keygen -t rsa -b 2048
+$ ssh-keygen -t rsa -b 2048
 \end{verbatim}
 
-Esto nos genera un \verb|.pub| dentro de la carpeta \verb|.ssh| y tenemos que copiar su contenido en el archivo \verb|.ssh/authorized_keys| del servidor. Con esto la próxima vez que nos conectemos  no tendremos que escribir la contraseña.
+Esto nos genera un \verb|.pub| dentro de la carpeta \verb|.ssh| y tenemos que copiar su contenido en el archivo \verb|.ssh/authorized_keys| del servidor. Con esto la próxima vez que nos conectemos no tendremos que escribir la contraseña \cite{Criptografíaasimétrica}.
 
 \subsubsection{Tunelando con ssh}
 En la escuela tenemos una arquitectura parecida a esta \ref{fig:Esquemadered}:
@@ -57,9 +57,28 @@ En la escuela tenemos una arquitectura parecida a esta \ref{fig:Esquemadered}:
         \label{fig:Esquemadered}
 \end{figure}
 
+Desde ``Mi equipo'' no puedo conectarme al ``Otro equipo''. Para solvertar este problema creamos un tunel:
+\begin{verbatim}
+$ ssh -L 2222:donatello:22 -L 2221:leonardo:22 usuario@gf.tel.uva.es
+\end{verbatim}
 
+Con esta linea hemos abierto un túnel desde nuestro puerto 2222 y 2221 al 22 de donatello y leonardo respectivamente a través de \url{gf.tel.uva.es}. Ahora para conectarnos a nuestro túnel escribimos en nuestro terminal:
+\begin{verbatim}
+$ ssh usuario@localhost -p2221 -X
+$ ssh usuario@localhost -p2222 -X
+\end{verbatim}
 
-http://dev.callepuzzle.com/uso-de-tuneles-ssh-y-screen/
+\subsubsection{Screen}
+Screen es una herramienta que nos permite recuperar una sesión shell. Podemos dejar corriendo un script cerrar la conexión, irnos a casa, abrir una conexión nueva y recuperar la misma terminal que teníamos antes.
+
+Uso básico de \verb|screen|:
+\begin{verbatim}
+$ screen // abre una sesión
+Ctrl + a + d // deja la sesión en background.
+$ screen -r // recupera la sesión
+\end{verbatim}
+\cite{Usodetúnelessshyscreen}
+\cite{UsobásicodescreenenLinux}
 
 [1] (man de linux)
 [2] Programación de Shell Scripts, Alberto Luna Fernández y Pablo Sanz Mercado, 
