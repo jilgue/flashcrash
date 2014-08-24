@@ -35,7 +35,30 @@ Como esta red no está accesible desde el exterior de la escuela, para poder trab
 
 \subsection{¿Comó trabajar desde fuera de la ETSiT?}
 \label{subsec:ComoTrabajarDesdeFueraETSiT}
-Se puede tardar días en conseguir resultados, para monitorizar el proceso es necesario conectarse a los equipos y poder recuperar la shell donde lanzamos el script.
+Se puede tardar días en conseguir resultados, para monitorizar el proceso es necesario conectarse a los equipos y poder recuperar la shell donde tenemos lanzado el script. Para ellos nos hemos ayudado del protocolo SSH y el comando screen.
+
+\subsubsection{SSH}
+SSH es un protocolo de shell remota segura. Gracias a ello podemos conectarnos al terminal de un ordenador y ejecutar ordenes en él.
+
+SSH usa una autenticación con cable publico/privada. Si queremos conectarnos por ssh sin tener que escribir la contraseña cada vez, tenemos que generar una pareja de claves y añadir la publica a nuestro servidor:
+\begin{verbatim}
+ssh-keygen -t rsa -b 2048
+\end{verbatim}
+
+Esto nos genera un \verb|.pub| dentro de la carpeta \verb|.ssh| y tenemos que copiar su contenido en el archivo \verb|.ssh/authorized_keys| del servidor. Con esto la próxima vez que nos conectemos  no tendremos que escribir la contraseña.
+
+\subsubsection{Tunelando con ssh}
+En la escuela tenemos una arquitectura parecida a esta \ref{fig:Esquemadered}:
+
+\begin{figure}
+	\centering
+		\includegraphics[width=0.60\textwidth,natwidth=299,natheight=266]{fig/tunel-ssh2}
+	\caption{\emph{Esquema de red}}
+        \label{fig:Esquemadered}
+\end{figure}
+
+
+
 http://dev.callepuzzle.com/uso-de-tuneles-ssh-y-screen/
 
 [1] (man de linux)
