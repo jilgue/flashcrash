@@ -18,25 +18,42 @@ Como esta red no está accesible desde el exterior de la escuela, para poder trab
 \section{Utilidades}
 
 \subsection{Comandos y herramientas utilizadas}
+\subsubsection{Comando Linux}
+En Linux existen mulitud de comandos que nos han facilitado el trabajo a la hora de realizar este Proyecto. Uno de los más importantes ha sido \verb|dd|.
+\begin{itemize}
+\item \verb|dd|: \textit{Copia un fichero, convirtiendo y formateando según los operandos}.
+En principio este comando se usa para crear copias de un disco, en nuestro caso creamos archivos \verb|.iso| de las memorias USB. Pero en unas pruebas nos dimos cuenta de que tenía mayor rendimiento que el comando \verb|cp|, que es el originario de Linux para copiar ficheros, y desde ese momento lo hemos usado también para la copia ``normal''. Por defecto sus bloques de copiado son de 1024bytes y sus parámetros son los siguientes:
+\begin{verbatim}
+$ dd if=ruta_o_fichero_entrada of=fichero_salida
+\end{verbatim}
+\item \verb|df|: \textit{Uso del espacio del sistema de ficheros}.
+Este comando te da información sobre el espacio de los dispositivos montados en el sistema. A parte de ver el espacio disponible en las memorias, principalmente se ha utilizado para ver la capacidad que tenían las memorias y comprobar si su capacidad se ha visto recudida, ver /ref{experiementoFlash}. Nota importante:
+\begin{verbatim}
+$ df --block-size=kB \\ Muestra un tamaño de bloque de 1000bytes
+$ df --block-size=k \\ Muestra un tamaño de bloque de 1024bytes
+\end{verbatim}
+\item \verb|hexdump|: \textit{Muestra el contenido de un fichero en ascii, decimal, hexadecimal, u octal}.
+Gracias a la orden:
+\begin{verbatim}
+$ hexdump -c .iso > .txt
+\end{verbatim}
+Podemos crear un archivo de texto con el que luego comprar con \verb|meld|, de esta manera podemos comparar imágenes \verb|iso| de forma muy fácil y ver sus diferencias.
+\item \verb|iotop|: \textit{Muestra el proceso de las peticiones de lectura o escritura que implican a distintos dispositivos del sistema}.
+Gracias a este comando podemos monitorizar si una lectura o escrita a la memoria sigue en curso o murio su proceso.
+\item \verb=ls -l | wc -l=: Esta orden muestra la cantidad de elementos en un directorio, ha sido de mucha utilidad sobre todo en el experimento de /ref{tabladenombres}.
+\item \verb|od -x .txt|: \textit{Muestra un fichero en octal y otros formatos}.
+Hemos utilizado ficheros en hexadecimal, como ficheros base de lectura y escritura en este proyecto, este comando ha ayudado a visualizar esos ficheros hexadecimales.
+\end{itemize}
+\cite{manLinux}
+\cite{ProgramacióndeShellScripts}
 
-  - Comprar archivos: hexdump -c .iso > .txt -> comparar con meld
-  - dd: bloques default 1024bytes
-  - df --block-size=kB -> 1000, k -> 1024
-  - cmp -l
-  - diff
-  - du -k == --block-size=1k == df
-  - tail
-  - cat
-  - screen: ctrl-a + d salir, screen -r entrar
-  - iotop
-  - ls -l | wc -l (contar elementos)
-  - od -x 1.txt muestra en hex
-[1] [2]
+\subsubsection{Bash y Shell script}
+Bash es ...
 
- 
-[1] (man de linux)
-[2] Programación de Shell Scripts, Alberto Luna Fernández y Pablo Sanz Mercado, 
+Gracias a estos Shell script hemos podido automatizar procesos que podrían llevar muchos días y filtar los resultados para una mejor comprensión de los mismos.
 
+\subsubsection{Control de versiones y Git}
+Git es una herramienta para el control de versiones. Tiene muchas virtudes, pero la más importante para este caso es poder tener un historio de cada cambio ``comiteado'', lo que nos permite tener una copia de seguridad casi perfecta tanto del código como de la redacción de Proyecto. En cualquier momento podemos volver a un punto anterior o ver que se cambiado de un fichero en concreto \cite{git-scm}. Todo el Proyecto se ha ido guardando en \url{github.com}, que permite crear repositorios git de manera gratuita siempre que estos sean de libre acceso, en esta dirección del mismo: \url{https://github.com/jilgue/flashcrash}.
 
 \subsection{¿Comó trabajar desde fuera de la ETSiT?}
 \label{subsec:ComoTrabajarDesdeFueraETSiT}
