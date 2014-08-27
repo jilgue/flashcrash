@@ -4,6 +4,226 @@
 
 
 \section{Código}
-\verb|archivos_marcados_b3.sh| 
+\verb|archivos_marcados_b3.sh|
+\begin{lstlisting}
+#
+# Crea ficheros de todos los tamaños posibles hasta llegar a 'valor_final'
+#
+valor_final=3907388
+((tamfinal=valor_final*1024))
 
-\lstinputlisting[language=bash]{../archivos_marcados_b3.sh}
+aux=2
+cont=0
+while [ $aux -le  $tamfinal ]; do
+
+	((aux=aux+aux))
+	((cont++))
+done
+
+echo "auxiliar" $aux
+echo "contado" $cont
+rm datos/*
+echo -e -n "\x00" > datos/datos0.txt
+
+((aux=cont))
+
+echo "vamos a contar desde 1 a " $aux
+
+for (( a=1 ; a<=aux ; a++ ))
+do
+	((b=a-1))
+	cat datos/datos$b.txt > datos/datos$a.txt
+	cat datos/datos$b.txt >> datos/datos$a.txt
+	echo $b
+	echo $a
+done
+\end{lstlisting}
+
+
+\verb|flash_b2.sh|
+\begin{lstlisting}
+#
+# 
+#
+dispo="4E06-0AB9"
+sdd="sdb"
+rm stam.txt	
+for (( b=0 ; b<999999999999999999999 ;b++))
+do
+	let vueltas=$b
+
+for (( a=1 ; a<3 ; a++ ))
+do
+	echo "numero serie ${b}_${a}"
+	echo -e -n "numero serie ${b}_${a}" > datos/${b}_${a}datos.txt
+	for (( c=1 ; c<200 ; c++ ))
+	do
+		echo -e -n "numero serie ${b}_${a}" >> 
+datos/${b}_${a}datos.txt
+	done
+	#cat datos/datos.txt >> datos/${b}_${a}datos.txt
+	#echo -e -n "numero serie ${b}_${a}" >> datos/${b}_${a}datos.txt
+	dd if=datos/${b}_${a}datos.txt 
+of=/media/${dispo}/${b}_${a}datos.txt
+	rm datos/*_*datos.txt
+done
+
+rm -f /media/${dispo}/*datos.txt
+
+df --block-size=KB | grep ${sdd} >> stam.txt
+#cut -c32-52 tam.txt >> stam.txt
+
+frase="vuelta "
+echo "$frase $vueltas" >> stam.txt
+echo " " >> stam.txt
+
+#sudo umount /media/usb0
+#sudo mount /dev/sdc1 /media/usb0
+
+done
+\end{lstlisting}
+
+
+\verb|flash_b3.sh|
+\begin{lstlisting}
+#
+# Crea un fichero con un texto reconocible y su numero de serie
+#
+rm stam.txt
+rm diff.txt
+for (( b=0 ; b<10 ;b++))
+do
+	let vueltas=$b
+
+for (( a=1 ; a<3 ; a++ ))
+do
+	echo "numero serie ${b}_${a}"
+	echo -e -n "En un lugar de la Mancha, de cuyo nombre no quiero 
+acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más 
+noches, duelos y quebrantos los sábados, lentejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su 
+hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas con sus pantuflos de lo mismo, los días de entre 
+semana se honraba con su vellori de lo más fino. Tenía en su casa una ama que pasaba de los cuarenta, y una sobrina que no llegaba a los 
+veinte, y un mozo de campo y plaza, que así ensillaba el rocín como tomaba la podadera. Frisaba la edad de nuestro hidalgo con los 
+cincuenta años, era de complexión recia, seco de carnes, enjuto de rostro; gran madrugador y amigo de la caza. Quieren decir que tenía el 
+sobrenombre de Quijada o Quesada (que en esto hay alguna diferencia en los autores que deste caso escriben), aunque por conjeturas 
+verosímiles se deja entender que se llama Quijana; pero esto importa poco a nuestro cuento; basta que en la narración dél no se salga un 
+punto de la verdad. ${b}_${a}" > datos/${b}_${a}datos.txt
+	#cat datos/datos.txt >> datos/${b}_${a}datos.txt
+	#echo -e -n "numero serie ${b}_${a}" >> datos/${b}_${a}datos.txt
+	dd if=datos/${b}_${a}datos.txt of=/media/usb0/${b}_${a}datos.txt
+	rm datos/*_*datos.txt
+done
+
+dd if=/dev/sdc1 of=copias/${b}.iso
+
+echo "vuelta ${b}" >> diff.txt
+
+if (($b != 0 ))
+then
+((c=b-1))
+cmp -l copias/${b}.iso copias/${c}.iso >> diff.txt
+fi
+
+echo "" >> diff.txt
+
+rm -f /media/usb0/*datos.txt
+
+df --block-size=KB | grep sdc1 > tam.txt
+cut -c32-52 tam.txt >> stam.txt
+
+frase="vuelta "
+echo "$frase $vueltas" >> stam.txt
+echo " " >> stam.txt
+
+done
+\end{lstlisting}
+
+\verb|mount.sh|
+\begin{lstlisting}
+rm md5.txt
+
+for (( a=1 ; a<999999999999999 ; a++ ))
+do
+	sudo umount /media/usb0
+	sudo mount /dev/sdb1 /media/usb0
+	echo "$a" >> md5.txt
+	dd if=/dev/sdb1 | md5sum >> md5.txt
+
+done
+\end{lstlisting}
+
+\verb|tam_bloque_b1.sh|
+\begin{lstlisting}
+df --block-size=KiB | grep sdb1 > tam.txt
+tam_final=$(cut -c56-63 tam.txt)
+echo $tam_final
+((valor_final=tam_final-6))
+((valor_final_bits=valor_final*1024))
+echo "valor final" $valor_final_bits
+final_binario=$(echo "obase=2; $valor_final_bits"| bc)
+echo $final_binario > long.txt
+echo "valor en binario" $final_binario
+long=${#final_binario}
+
+
+((long--))
+
+total=0
+
+((exp=long))
+
+for ((a=1;a<=long;a++))
+do
+bit=$(cut -c$a-$a long.txt)
+#echo "a="$a "bit sacado de long.txt" $bit
+if((bit==1))
+then
+	((exponente=2**exp))
+#	echo "exponente" $exp
+	echo $exp $exponente
+	((total=total+exponente))
+	
+	cat datos/datos$exp.txt >> datos/datosfin.txt
+fi
+((exp--))
+done
+
+echo $total
+\end{lstlisting}
+
+\verb|tam_bloque_b2.sh|
+\begin{lstlisting}
+((valor_final=3907388))
+#((valor_final=3907388/4))
+((valor_final_bits=valor_final*1024))
+echo "valor final" $valor_final_bits
+final_binario=$(echo "obase=2; $valor_final_bits"| bc)
+echo $final_binario > long.txt
+echo "valor en binario" $final_binario
+long=${#final_binario}
+
+
+((long--))
+
+total=0
+
+((exp=long))
+rm datos/datosfin.txt
+for ((a=1;a<=long;a++))
+do
+bit=$(cut -c$a-$a long.txt)
+#echo "a="$a "bit sacado de long.txt" $bit
+if((bit==1))
+then
+	((exponente=2**exp))
+#	echo "exponente" $exp
+	echo $exp $exponente
+	((total=total+exponente))
+	
+	cat datos/datos$exp.txt >> datos/datosfin.txt
+fi
+((exp--))
+done
+
+echo $total
+\end{lstlisting}

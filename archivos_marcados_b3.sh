@@ -1,3 +1,6 @@
+#
+# Crea ficheros de todos los tamaños posibles hasta llegar a 'valor_final'
+#
 valor_final=3907388
 ((tamfinal=valor_final*1024))
 
