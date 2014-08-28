@@ -22,7 +22,7 @@ En lo que consumo energético se refiere, algo bastante importante dependiendo de
 
 \begin{figure}
 	\centering
-		\includegraphics[width=0.60\textwidth,natwidth=610,natheight=642]{fig/comparacionNORNAN}
+		\includegraphics[width=0.60\textwidth,natwidth=610,natheight=642]{fig/comparacionNORNAN.eps}
 	\caption{\emph{Diferencia entre Flash NOR y NAND \cite{NANDvsNORFlashMemory}}}
         \label{fig:comparacionNORNAN}
 \end{figure}
@@ -40,7 +40,7 @@ Como hemos visto anteriormente, el uso de las memorias Flash está bastante exten
 
 \begin{figure}
 	\centering
-		\includegraphics[width=0.60\textwidth,natwidth=610,natheight=642]{fig/US-SSD-Price}
+		\includegraphics[width=0.60\textwidth,natwidth=610,natheight=642]{fig/US-SSD-Price.eps}
 	\caption{\emph{Evolución de los precios de los discos SSD \cite{priceSSDEvolution}}}
         \label{fig:US-SSD-Price}
 \end{figure}
@@ -53,18 +53,18 @@ También se debe indicar que en algunos dispositivos, como las memorias USB, el c
 
 En este proyecto hemos tratado de profundizar sobre funcionamiento de las memorias flash, sobre todo en lo que se refiere al funcionamiento interno, a bajo nivel, pero sin entrar en el hardware. En qué posiciones de memoria guarda la tabla de nombres, cómo gestiona los archivos, cúal es el tamaño que tiene un sector, cuantos ciclos de vida útil tiene un sector y qué información queda cuando un sector se deteriora.
 
-Para ello hemos realizado varios experiementos, los cuales detallamos en el Capítulo 4.
+Para ello hemos realizado varios experiementos, los cuales detallamos en el Capítulo 3 /ref{}.
 
 \section{Objetivos}
 
 \begin{itemize}
-\item Determinar el tamaño de sector en hardware y software
-\item Determinar como funciona la tabla de nombre
-\item Si se recolocan para salvaguardar los sectores ?
+\item  \textbf{Determinar el tamaño de sector en hardware y software}: hay que diferenciar entre lo que el sistema ve y lo que realmente está guardado en memoría. El sistema de ficheros puede tener un tamaño de bloque distinto del que físicamente tiene la memoria.
+\item  \textbf{Determinar como funciona la tabla de nombre}: en la tabla de nombres están los nombres de los ficheros que tiene guardados la memoria, ¿se guarda también un puntero al fichero? ¿esta tabla tiene algún formato especial?. Son algunas de las preguntas que intentaremos resolver en este apartado.
+\item  \textbf{¿El controlador mueve datos entre bloques para alargar la vida de los mismo?}: cada bloque tiene unos ciclos de vida, si solo unos pocos están libres y siempre se usan los mismos, ¿puede el controlador mover datos a bloques que estén menos ``gastados''?.
   \begin{itemize}
-  \item Un borrado implica cambios "fisicos" ?¿
-  \item Si el montar y desmontar un dispositivo implica el movimiento de datos
+  \item  \textbf{¿Un borrado implica cambios "físicos"?}: Cuando se borra un fichero desde el sistema operativo, sus datos siguen existiendo hasta que se sobre escribe, ¿se borra también su referencia en la tabla de nombres?.
+  \item  \textbf{¿El montar y desmontar un dispositivo implica movimiento de datos?}: Puede pasar que el supuesto moviento de datos al que nos referiamos antes pase en el montado y desmontado del dispositivo.
   \end{itemize}
-\item Determinar la vida util (ciclos de vida) de un sector
-\item Ver que información queda despues de un sector roto.
+\item  \textbf{Determinar la vida util (ciclos de vida) de un sector}: cada bloque de memoria tiene unos ciclos de borrado/escritura, vamos a determinar cuantos ciclos aguanta un bloque.
+\item  \textbf{Ver que información queda despues de un sector roto}: una vez que un bloque de memoria deja de estar reconocible por el sistema, ¿queda algún tipo de información útil en él?.
 \end{itemize}
