@@ -1,6 +1,6 @@
 \chapter{Introducción}
 
-En este proyecto de final de carrera, tiene como objetivo el estudio del comportamiento de las memorias Flash cuando ... ¿Por qué son tan importantes este tipo de memorias? 
+Este proyecto de final de carrera, tiene como objetivo el estudio del comportamiento de las memorias Flash cuando han tenido un uso excesivo, y su capacidad se ve afectada por la perdida de bloques de memoria. ¿Por qué son tan importantes este tipo de memorias? 
 
 Existen multitud de dispositivos que usamos en nuestro día a día que usan este tipo de tecnología. Tanto de uso de general, como puede ser, ordenadores portátiles, discos de estado solido (SSD), tablets, sistemas de posicionamiento global (GPS), reproductores de música, cámaras digitales, teléfonos móviles, instrumentos musicales electrónicos, decodificadores de televisión, etc. Además de en otras muchas aplicaciones industriales, como sistemas de seguridad, productos de redes y comunicación, productos de administración de ventas (lectores portátiles) o sistemas militares \cite{GuíaProductosMemoriaFlash}.
 
@@ -22,17 +22,16 @@ En lo que consumo energético se refiere, algo bastante importante dependiendo de
 
 \begin{figure}
 	\centering
-		\includegraphics[width=0.60\textwidth,natwidth=610,natheight=642]{fig/comparacionNORNAN.eps}
+		\includegraphics[width=0.60\textwidth]{fig/comparacionNORNAN.eps}
 	\caption{\emph{Diferencia entre Flash NOR y NAND \cite{NANDvsNORFlashMemory}}}
         \label{fig:comparacionNORNAN}
 \end{figure}
 
 En la actualidad la diferencia entre los dos tipos es cada vez menor \cite{NANDvsNORFlashMemory} \cite{FlashMemoryWikipedia}.
 
-(características de la memoria utilizada por encima, con mas profundidad sig cap)
+La memoria Flash con la que hemos trabajado ha sido es una \textit{BIWIN BW29F64G08CBABA}, que son de tipo \textit{Micron 20nm MLC Flash}. El controlador que utiliza es un \textit{Alcor AU6989ANHL}.
 
-El futuro de la memoria flash: (encontrar tipo de memoria usada en movil tablet), [3] (enlazar este cacho de ssd con motivación), uso de flash como RAM [4].
-http://www.convertronic.net/Microcontroladores/serie-de-microcontroladores-de-ultra-bajo-consumo-de-energia-rh850f1x-chip-de-memoria-flash-de-40-nm-para-aplicaciones-en-automocion.html
+Por último mencionar que este tipo de tecnología va a ser muy importante en el futuro como por ejemplo en aplicaciones de automoción han conseguido microcontroladores con una memoria Flash de 40nm de muy bajo consumo \cite{aplicaciones-en-automocion}. Hay también proyectos para usar las memorias Flash como RAM, pero de momento son más lentas que las DRAM, aunque puede llegar a consumir diez veces menos de energía y es algo más barata \cite{flashram}.
 
 \section{Motivación}
 
@@ -53,7 +52,7 @@ También se debe indicar que en algunos dispositivos, como las memorias USB, el c
 
 En este proyecto hemos tratado de profundizar sobre funcionamiento de las memorias flash, sobre todo en lo que se refiere al funcionamiento interno, a bajo nivel, pero sin entrar en el hardware. En qué posiciones de memoria guarda la tabla de nombres, cómo gestiona los archivos, cúal es el tamaño que tiene un sector, cuantos ciclos de vida útil tiene un sector y qué información queda cuando un sector se deteriora.
 
-Para ello hemos realizado varios experiementos, los cuales detallamos en el Capítulo 3 /ref{}.
+Para ello hemos realizado varios experiementos, los cuales detallamos en el Capítulo \ref{chap:cap3}.
 
 \section{Objetivos}
 
