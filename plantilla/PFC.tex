@@ -20,6 +20,7 @@
 \marginsize{3cm}{2cm}{2.5cm}{2.5cm}%Permite manejar los márgenes de forma sencilla
 \usepackage[Lenny]{fncychap}
 \usepackage{url}
+\usepackage{listings} %Permite añadir código
 %\usepackage{eurofont}%Permite usar el símbolo de euro
  \pagestyle{fancy}
 %\addtolength{\footskip}{+3cm}
@@ -32,7 +33,7 @@
 %-----------------------------------------------------------------------------------------------
 \begin{document}%%%Aquí empieza el documento%%%
 
-%\input{portada/port.tex}%Portada Gráfica
+\input{portada/port.tex}%Portada Gráfica
 
 \DeclareGraphicsExtensions{.jpg,.pdf,.mps,.png,.gif,.fig,.bmp,.PNG}
 %Declaración de extensiones de figuras para el paquete graphicx
@@ -92,6 +93,8 @@
 %=============================================================
 
 \include{capitulo1/capitulo1}
+\include{capitulo2/capitulo2}
+\include{capitulo3/capitulo3}
 
 %------------------------------------------------------------
 %          Bibliografia
