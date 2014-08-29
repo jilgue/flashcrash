@@ -2,19 +2,21 @@
 \section{Estado del arte}
 
 \subsection{Descripción de equipos}
-Para poder realizar los experimentos hemos contado con dos equipos en el laboratorio. Son dos equipos con procesador AMD Phenom (tm) X6 1055T, con 7'6 GiB de RAM. En los que hemos instalado Debian 6.0.6, que viene con el kernel 2.6.32-5-amd64.
+Para poder realizar los experimentos hemos contado con dos equipos en el laboratorio. Son dos equipos con procesador AMD Phenom (tm) X6 1055T y 7'6 GiB de RAM. En ellos hemos instalado Debian 6.0.6, que viene con el kernel 2.6.32-5-amd64.
 
 Ambos dos forman parte de una red interna de \url{gf.tel.uva.es}, teniendo cada uno de ellos los siguientes hostnames:
+\setlength{\parskip}{0mm}
 \begin{itemize}
 \item Leonardo, con la IP: 192.168.0.50.
 \item Donatello, con la IP: 192.168.0.51.
 \end{itemize}
+\setlength{\parskip}{4mm}
 
-Como esta red no está accesible desde el exterior de la escuela, para poder trabajar desde casa y tener monitorizado los experimentos, hemos recurrido a los tuneles ssh y al commando screen de Linux, que detallamo en la siguiente sección \ref{subsec:ComoTrabajarDesdeFueraETSiT}.
+Como esta red no está accesible desde el exterior de la escuela, para poder trabajar desde casa y tener monitorizado el trabajo, hemos recurrido a los tuneles ssh y al commando screen de Linux, que detallamo en la siguiente sección \ref{subsec:ComoTrabajarDesdeFueraETSiT}.
 
 \subsection{Características de la memoria}
 
-La diferencia entre lo que se ve desde el software y lo que fisicamente está, es algo muy importante en este Proyecto. Como ya hemos comentado, todas las memorias disponen de un controlador, y este puede recolocar los datos de manera interna, y completamente trasparente hacia el exterior.
+La diferencia entre lo que se ve desde el software y lo que fisicamente está, es algo muy importante en este Proyecto. Como ya hemos comentado, todas las memorias disponen de un controlador, y este puede recolocar los datos de manera interna, y completamente trasparente desde el exterior.
 
 Tamaño de cluster que impone fat32 \cite{fat32_1} \cite{fat32_2}
 
@@ -30,7 +32,7 @@ En principio este comando se usa para crear copias de un disco, en nuestro caso 
 $ dd if=ruta_o_fichero_entrada of=fichero_salida
 \end{verbatim}
 \item \verb|df|: \textit{Uso del espacio del sistema de ficheros}.
-Este comando te da información sobre el espacio de los dispositivos montados en el sistema. A parte de ver el espacio disponible en las memorias, principalmente se ha utilizado para ver la capacidad que tenían las memorias y comprobar si su capacidad se ha visto recudida, ver /ref{experiementoFlash}. Nota importante:
+Este comando te da información sobre el espacio de los dispositivos montados en el sistema. A parte de ver el espacio disponible en las memorias, principalmente se ha utilizado para ver la capacidad de las memorias y comprobar si su capacidad se ha visto recudida, ver /ref{experiementoFlash}. Nota importante:
 \begin{verbatim}
 $ df --block-size=kB \\ Muestra un tamaño de bloque de 1000bytes
 $ df --block-size=k \\ Muestra un tamaño de bloque de 1024bytes
@@ -40,7 +42,7 @@ Gracias a la orden:
 \begin{verbatim}
 $ hexdump -c .iso > .txt
 \end{verbatim}
-Podemos crear un archivo de texto con el que luego comprar con \verb|meld|, de esta manera podemos comparar imágenes \verb|iso| de forma muy fácil y ver sus diferencias.
+Podemos crear un archivo de texto que luego comprar con \verb|meld|, de esta manera podemos comparar imágenes \verb|iso| de forma muy fácil y ver sus diferencias.
 \item \verb|iotop|: \textit{Muestra el proceso de las peticiones de lectura o escritura que implican a distintos dispositivos del sistema}.
 Gracias a este comando podemos monitorizar si una lectura o escrita a la memoria sigue en curso o murio su proceso.
 \item \verb=ls -l | wc -l=: Esta orden muestra la cantidad de elementos en un directorio, ha sido de mucha utilidad sobre todo en el experimento de /ref{tabladenombres}.
@@ -51,21 +53,35 @@ Hemos utilizado ficheros en hexadecimal, como ficheros base de lectura y escritu
 \cite{ProgramacióndeShellScripts}
 
 \subsubsection{Bash y Shell script}
-Bash es ...
+\textbf{Bash} es un itérprete de órdenes, está basado en la shell de Unix y es compatible con POSIX. Su nombre viene del acrónimo ``\textit{Bourne-Again SHell}'', un juego de palabras de Stephen Bourne, el autor del antecesor de la Shell actual de Unix \cite{gnubash}. Bash dispone de una gran cantidad de comandos que te permiten hacer casi cualquier cosa \cite{indexbashcommand}.
+
+Una \textbf{Shell} es un marco que ejecuta comandos. La Shell puede aceptar de entrada órdenes por teclado o leer instrucciones de un fichero \cite{gnubash}.
+
+Un script de Shell es una secuencia de comandos que se ejecutan uno detrás de otro, ya que es un tipo de lenguaje interpretado. Un fichero de texto con extensión \verb|.sh| al que se le da permisos de ejecución ``\verb|chmod u+x script.sh|'' ya es puede ser ejecutado en Linux.
 
 Gracias a estos Shell script hemos podido automatizar procesos que podrían llevar muchos días y filtar los resultados para una mejor comprensión de los mismos.
 
+Bash tiene algunas peculiaridades a la hora de tratar con variables que puede llamar la anteción acostumbrado a otros lenguajes de programación:
+
+\begin{itemize}
+
+\item La asignación de variables se realiza sin ``declaración'': \verb|varible=valor|.
+\item Para modificar esas variables se usan dobles parentesis: \verb|((variable=variable+10))|.
+\item Para usar las variables deben estar precedidas de \verb|$|: \verb|echo ``Hola'' $variable|.
+
+\end{itemize}
+
 \subsubsection{Control de versiones y Git}
-Git es una herramienta para el control de versiones. Tiene muchas virtudes, pero la más importante para este caso es poder tener un historio de cada cambio ``comiteado'', lo que nos permite tener una copia de seguridad casi perfecta tanto del código como de la redacción de Proyecto. En cualquier momento podemos volver a un punto anterior o ver que se cambiado de un fichero en concreto \cite{git-scm}. Todo el Proyecto se ha ido guardando en \url{github.com}, que permite crear repositorios git de manera gratuita siempre que estos sean de libre acceso, en esta dirección del mismo: \url{https://github.com/jilgue/flashcrash}.
+Git es una herramienta para el control de versiones. Tiene muchas virtudes, pero la más importante en este contexto es poder tener un histórico de cada cambio ``comiteado'', lo que nos permite tener una copia de seguridad casi perfecta tanto del código como de la redacción de Proyecto. En cualquier momento podemos volver a un punto anterior o ver que se cambiado de un fichero en concreto \cite{git-scm}. Todo el Proyecto se ha ido guardando en \url{github.com}, que permite crear repositorios git de manera gratuita siempre que estos sean de libre acceso, esta dirección del repositorio: \url{https://github.com/jilgue/flashcrash}.
 
 \subsection{¿Comó trabajar desde fuera de la ETSiT?}
 \label{subsec:ComoTrabajarDesdeFueraETSiT}
 Se puede tardar días en conseguir resultados, para monitorizar el proceso es necesario conectarse a los equipos y poder recuperar la shell donde tenemos lanzado el script. Para ellos nos hemos ayudado del protocolo SSH y el comando screen.
 
 \subsubsection{SSH}
-SSH es un protocolo de shell remota segura. Gracias a ello podemos conectarnos al terminal de un ordenador y ejecutar ordenes en él.
+SSH es un protocolo de shell remota segura. Gracias a ello podemos conectarnos al terminal de un ordenador y ejecutar ordenes en él. 
 
-SSH usa una autenticación con cable publico/privada. Si queremos conectarnos por ssh sin tener que escribir la contraseña cada vez, tenemos que generar una pareja de claves y añadir la publica a nuestro servidor:
+SSH usa una autenticación con cable publico/privada. Si queremos conectarnos por SSH sin tener que escribir la contraseña cada vez, tenemos que generar una pareja de claves y añadir la publica a nuestro servidor:
 \begin{verbatim}
 $ ssh-keygen -t rsa -b 2048
 \end{verbatim}
