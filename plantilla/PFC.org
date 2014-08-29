@@ -1,0 +1,330 @@
+* Apuntes:
+** Tuneles ssh
+- $ ssh -L 2222:donatello:22 cmarcri@gf.tel.uva.es
+- $ ssh cmarcril@localhost -p2222
+** Comandos
+- Comprar archivos: hexdump -c .iso > .txt -> comparar con meld
+- dd: bloques default 1024bytes
+- df --block-size=kB -> 1000, k -> 1024
+- cmp -l
+- diff
+- du -k == --block-size=1k == df
+- tail
+- cat
+- screen: ctrl-a + d salir, screen -r entrar
+- iotop
+- ls -l | wc -l (contar elementos)
+- od -x 1.txt muestra en hex
+** Equipos
+2.6.32-5-amd64
+debian 6.0.6
+RAM 7'6 GiB
+6 Procesadores AMD Phenom (tm) X6 1055T
+- leonardo: 192.168.0.50
+- donatello: 192.168.0.51 
+** Documentación
+- http://www.bitlib.net/f/file+system.html
+- File System Forensic Analysis" de Brian Carrier http://www.online-convert.com/es/resultado/0cdbcd0ae5995eba64e2a6524b6284fd
+- http://stackoverflow.com/questions/18135451/what-is-the-difference-between-var-var-and-var-in-the-bash-shell
+- http://blog.openalfa.com/como-trabajar-con-fechas-en-un-shell-script
+-
+** Apuntes
+- http://www.deftlinux.net/
+- http://www.sleuthkit.org/sleuthkit/ 
+- http://www.digital-evidence.org/fsfa/
+- http://wiki.sleuthkit.org/index.php?title=Library_User%27s_Guide
+- http://wiki.sleuthkit.org/index.php?title=Timeline
+- http://wiki.sleuthkit.org/index.php?title=FAT_Implementation_Notes
+- http://wiki.sleuthkit.org/index.php?title=FS_Analysis
+- http://wiki.sleuthkit.org/index.php?title=TSK_Tool_Overview
+** Latex
+- http://www.uv.es/~jgutierr/LatexAvanzado/SesionesXaro/LatexAvanzado_x1.pdf
+- http://ece.uprm.edu/~f_perez/Latex/2005/manual.pdf
+- ftp://ftp.dante.de/tex-archive/info/spanish/guia-atx/guia-atx.pdf
+- http://metodos.fam.cie.uva.es/~latex/
+* Experimentos
+** Tabla de nombres
+crear_mismo_tam.sh
+he creado 32.767 copias hasta decir que está lleno, df -h dice que usa 130M, supongo que estará llena la tabla
+dd -> lleno.iso
+---
+En Donatello:
+/dev/sdb1 /media/EC8C-B708
+formateamos
+
+ls -l | wc -l
+43691
+
+datos de 3k sin el txt
+65536
+
+mucho ruido en el disposito -> dd if=/dev/zero of=/dev/sdb1 bs=1K count=3832068
+
+./crear_mismo_tam.sh
+
+-> 65536copias3kConTxtDespuesDeFormateo.iso
+
+- 65536 datos
+- última posición en la tabla en 108d3fb2 - offset: 277692376
+- última posición de datos en 109527f4 - offset: 278210558
+
+** Crash
+*** Prueba1
+En Donatello
+/dev/sde1 
+
+- llenar usb: ./tam_bloque_b2.sh
+- ./flash_b2.sh
+- solo de lectura
+
+- cmarcril@donatello:/media/74A8-CE74$ ls
+ls: no se puede acceder a çσ 01s▒._a: Error de entrada/salida
+ls: no se puede acceder a |dk .¡s: Error de entrada/salida
+ls: no se puede acceder a tr⌠s±>`┐.hsq: Error de entrada/salida
+?ük`êç?î.?┼f  ??@@B ¿z.?  ?"?"?É.éê?  ??|u?dk .¡s?  ?Æ"öU5_#.ne¡  5iryαc?▓.!e0  `6ü?Dâ??.â "  tr⌠s±>`┐.hsq  çσ 0?1s?._?a  ê╨!?ü.?$é
+
+- cmarcril@donatello:~/flashcrash$ tail stam.txt
+/dev/sde1            3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
+vuelta  50356019
+/dev/sde1            3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
+vuelta  50356020
+/dev/sde1            3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
+vuelta  50356021
+
+- dd if=/dev/sde1 of=20140515.iso
+
+- log
+kern.log:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)
+kern.log:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem error (dev sde1)
+kern.log:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem error (dev sde1)
+kern.log:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+messages:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+syslog:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)
+syslog:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem error (dev sde1)
+syslog:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem error (dev sde1)
+syslog:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+*** Prueba2
+- /dev/sdb1            3923776kB 3923760kB      17kB 100% /media/3EE2-0961
+Fecha vie may 23 17:36:49 CEST 2014 vuelta  11157849
+ 
+/dev/sdb1            3923776kB 3923760kB      17kB 100% /media/3EE2-0961
+Fecha vie may 23 17:36:49 CEST 2014 vuelta  11157850
+ 
+/dev/sdb1            3923776kB 3923760kB      17kB 100% /media/3EE2-0961
+Fecha vie may 23 17:36:50 CEST 2014 vuelta  11157851
+
+- 
+* Redacción
+** Prólogo
+** Capitulo 1
+*** Introducción
+En este capítulo se hará una breve exposición sobre el proyecto final de carrera.
+
+Empezaremos con una introducción a la tegnología Flash, ¿qué son las memorias Flash?
+
+La memoria flash es una evolución de la memoria EEPROM, permite la lectura y escritura de múltiples posiciones de memoria en la misma operación. Gracias a ello, la tecnología flash, permite velocidades de funcionamiento muy superiores a la tecnología EEPROM, que sólo permitía actuar sobre una única celda de memoria en cada operación de programación.
+
+Utiliza una tecnología de almacenamiento que mediante impulsos eléctricos es capaz de leer, escribir o borrar información. Estas memorias están basadas en transistores de puerta flotante colocados formando celdas. El elemento básico de funcionamiento de las memorias son los transistores MOS de puerta-flotante [1].
+
+Fujio Masuoka en 1984 inventó este tipo de memoria como evolución de las EEPROM existentes por aquel entonces, mientras trabajaba en Toshiba. Intel intentó atribuirse la creación de esta sin éxito, aunque si comercializó la primera memoria flash de uso común en 1988 [2].
+
+Se dividen en dos clases según el tipo de puertas usado en su fabricación:
+ - NAND: diseñadas con unas celdas muy pequeñas, que permiten tener un precio muy pequeño por bit de almacenamiento.
+ - NOR: típicamente se han usado para almacenar el software que luego es ejecutado en los dispositivos portátiles.
+En la actualidad la diferencia entre los dos tipos es cada vez menor [2].
+
+(Figura 1)
+
+[2]
+
+http://media.kingston.com/pdfs/FlashMemGuide_LA.pdf
+
+(características de la memoria utilizada por encima, con mas profundidad sig cap)
+
+El futuro de la memoria flash: (encontrar tipo de memoria usada en movil tablet), [3] (enlazar este cacho de ssd con motivación), uso de flash como RAM [4].
+http://www.convertronic.net/Microcontroladores/serie-de-microcontroladores-de-ultra-bajo-consumo-de-energia-rh850f1x-chip-de-memoria-flash-de-40-nm-para-aplicaciones-en-automocion.html
+
+En este proyecto hemos tratado de profundizar sobre funcionamiento de las memorias flash, sobre todo en lo que se refiere al funcionamiento interno, a bajo nivel, pero sin entrar en el hardware. En qué posiciones de memoria guarda la tabla de nombres, cómo gestiona los archivos, cúal es el tamaño que tiene un sector, cuantos ciclos de vida útil tiene un sector y qué información queda cuando un sector se deteriora.
+
+Para ello hemos realizado varios experiementos, los cuales detallamos en el cap ...
+
+Hemos usado varias herramientas para facilitarnos el trabajo de investigación. Hemos elegido linux como entorno de investigación por la cantidad de utilidades que tiene para prácticas y por la facilidad para crear scripts que interacciones con estas herramientas.
+
+Shell http://www.softpanorama.org/People/Shell_giants/introduction.shtml 
+
+http://en.wikipedia.org/wiki/Shell_script (Kernighan, Brian W.; Pike, Rob (1984), "3. Using the Shell", The UNIX Programming Environment, Prentice Hall, Inc., p. 94, ISBN 0-13-937699-2, "The shell is actually a programming language: it has variables, loops, decision-making, and so on.") 
+
+Gracias a estos scripts hemos podido automatizar procesos que podrían llevar muchos días y filtar los resultados para una mejor comprensión de los mismos.
+
+(Contar breve instroducción a bash)
+http://www.gnu.org/software/bash/manual/bash.html
+http://ss64.com/bash/index.html
+http://www.tldp.org/LDP/Bash-Beginners-Guide/html/
+
+(No se si se puede comentar que están subidos a github, y la ventaja de usar un control de versiones)
+http://git-scm.com/about
+
+
+[1] R. Bez, E. Camerlenghi, A. Modelli y A. Visconti, Introduction to flash memory, Proceedings of the IEEE,Vol.91, No.4, APRIL 2003.
+
+[2] http://en.wikipedia.org/wiki/Flash_memory 2,3,4,5
+
+[2] http://maltiel-consulting.com/NAND_vs_NOR_Flash_Memory_Technology_Overview_Read_Write_Erase_speed_for_SLC_MLC_semiconductor_consulting_expert.pdf
+[3] http://www.wdc.com/WDProducts/SSD/whitepapers/en/NAND_Evolution_0812.pdf
+[4] http://www.tomshardware.com/news/fusio-io-flash-ssdalloc-memory-ram,16352.html
+
+*** Motivación
+
+Analizamos a bastante bajo nivel el funcionamiento de una tecnología cuyo uso está en crecimiento gracias a todos los dispotivos móbiles y tabletas. Las memorias flash son el tipo de almacenamiento que más pequeño puede ser, vease las memorias SD, y además consumen muy poca energía. ?¿
+
+http://csl.skku.edu/papers/jsa11.pdf
+http://www.adms-conf.org/p36-KIM.pdf
+
+Y conforme se abaratan los precios de las memorias, estamos viendo como la tecnología flash se está implantando en los ordenadores portátiles con los discos de estádo solido (SSD).
+http://www.pcmag.com/article2/0,2817,2404258,00.asp
+
+La sociedad demanda dispositivo más pequeños con más capacidad, y más rápidos en el caso de los discos ssd en los portatiles.
+
+Este estudio nos ayuda a profundizar sobre el funcionamiento general de las memorias flash, cómo de fiables pueden llegar a ser, y qué información se puede recuperar cuando una memoria falla o llega al final de su vida útil.
+
+*** Objetivos
+- Determinar el tamaño de sector en hardware y software
+- Determinar como funciona la tabla de nombre
+- Si se recolocan para salvaguardar los sectores ?
+  - Un borrado implica cambios "fisicos" ?¿
+  - Si el montar y desmontar un dispositivo implica el movimiento de datos
+- Determinar la vida util (ciclos de vida) de un sector
+- Ver que información queda despues de un sector roto.
+(Breve descripción de cada uno de ellos)
+** Capitulo 2
+*** Estado del arte
+(descripción y características de la memoria)
+http://www.micron.com/products/nand-flash
+http://translate.google.es/translate?hl=es&sl=zh-CN&u=http://www.ebwhk.com/ProductView.asp%3FSortID%3D161%26id%3D222&prev=/search%3Fq%3Dbw29f64g08cbaba%26client%3Dfirefox-aurora%26hs%3DqB3%26rls%3Dorg.mozilla:en-US:unofficial%26channel%3Dsb%26biw%3D1173%26bih%3D586
+
+BIWIN BW29F64G08CBABA
+Para TSOP 48 de rawNAND, podemos ofrecer los siguientes productos:
+Micron 20nm MLC flash
+PN correspondiente es: MT29F32G08CBADA, MT29F64G08CBABA, MT29F128G08CFABA
+Producto BIWIN corresponde PN: BW29F32G08CBADA, BW29F64G08CBABA, BW29F128G08CFABA 
+
+http://translate.google.es/translate?hl=es&sl=zh-CN&u=http://wenku.baidu.com/view/f3ae146cad02de80d5d84024.html&prev=/search%3Fq%3Dbw29f64g08cbaba%26client%3Dfirefox-aurora%26hs%3DqB3%26rls%3Dorg.mozilla:en-US:unofficial%26channel%3Dsb%26biw%3D1173%26bih%3D586
+
+
+http://en.wikipedia.org/wiki/Open_NAND_Flash_Interface_Working_Group
+
+controlador: alcor au6989anhl
+http://www.nxp.com/documents/data_sheet/NPIC6C4894.pdf
+
+Tamaño de cluster que impone fat32: http://support.microsoft.com/kb/140365/es, http://support.microsoft.com/kb/192322/es
+
+Figura 13: array organization per Logical Unit (LUN)
+
+tamaño de flash nand: http://e2e.ti.com/support/dsp/davinci_digital_media_processors/f/100/p/311521/1084615.aspx#1084615
+                      http://processors.wiki.ti.com/index.php/Get_the_Flash_Erase_Block_Size
+
+http://wiki.laptop.org/go/How_to_Damage_a_FLASH_Storage_Device
+
+- Descripción de equipos:
+  2.6.32-5-amd64
+  debian 6.0.6
+  RAM 7'6 GiB
+  6 Procesadores AMD Phenom (tm) X6 1055T
+  - leonardo: 192.168.0.50
+  - donatello: 192.168.0.51 
+
+(Descripción mas en profundidad de las herramientas usadas)
+    
+*** Utilidades
+- Comandos y herramientas utilizadas:
+
+  - Comprar archivos: hexdump -c .iso > .txt -> comparar con meld
+  - dd: bloques default 1024bytes
+  - df --block-size=kB -> 1000, k -> 1024
+  - cmp -l
+  - diff
+  - du -k == --block-size=1k == df
+  - tail
+  - cat
+  - screen: ctrl-a + d salir, screen -r entrar
+  - iotop
+  - ls -l | wc -l (contar elementos)
+  - od -x 1.txt muestra en hex
+[1] [2]
+
+- ¿Comó trabajar desde fuera de la ETSiT?
+
+Se puede tardar días en conseguir resultados, para monitorizar el proceso es necesario conectarse a los equipos y poder recuperar la shell donde lanzamos el script.
+http://dev.callepuzzle.com/uso-de-tuneles-ssh-y-screen/
+
+[1] (man de linux)
+[2] Programación de Shell Scripts, Alberto Luna Fernández y Pablo Sanz Mercado, 
+
+** Capitulo 3
+*** Análisis
+Como afontamos el problema.
+Descripción de la documentación que nos ha sido de utilidad.
+** Capitulo 4
+*** Experimentos
+**** Tamaño de sector
+
+- Idea: 
+el sistema de archivos tiene como tamaño mínimo de bloques los 4K.  Si grabamos un archivo de 8K y le borramos, el dispositivo solo elimina la tabla para encontrar los archivos, pero los datos siguen estando. Si a continuación grabamos uno de 6K para el dispositivo contarán como 8, pero ¿qué pasa con los datos restantes, con los 2K que no se sobre escriben y que en teoría siguen ahí?
+
+df: /dev/sdb1 
+bloques 1K: 3.831.812
+usado: 4K
+disponible: 3.831.808K
+Creamos un archivo de 3.813.800K para tener solo disponible dos bloques de memoria y saber dónde estamos escribiendo.
+(cp transferencia muy lenta)
+Creamos un archivo de 8K con el nombre de “datos13.txt” llevo de “BB”. Lo grabamos y hacemos una copia de la imagen iso.
+Creamos otro archivo de 6K con el mismo nombre y realizamos el mismo procedimiento.
+Los datos de “BB” se siguen estando en la imagen de 6K, en las últimas posiciones, empieza en 0xea554800.
+Cmp –l 8k.iso 6k.iso > dif.txt
+Entre la 754016 y la 754098 se encuentra la tabla de nombres.
+
+Diferencia entre el tamaño de sector que impone el sistema de archivos, en nuestro caso FAT32, que es de 4K, y el tamaño de sector del dispositivo, que es el tamaño de bloque físico. En teoría es de ...
+
+Para ello hemos creado un script que rellena todo el espacio hasta dejar 4K (el tamaño de sector del sistema de archivos),
+( podemos probar con dd, ya que con un cp no me va a dejar, rellenar hasta dejar libre 512 byte... tambien podemos compiar 1 byte, y mirar que ha cambiado)
+
+----
+dejamos libres 8K, copiamos dos archivos de 1bit, ver cuanto llena, como de separados están.
+
+**** Movimiendo de datos entre sectores
+
+- Suposiciones iniciales: 
+el controlador puede re ordenar los datos a distintos sectores para salvaguardar la vida del conjunto, haciendo que todos se usen de manera equitativa.
+
+- Experimento: 
+hash del usb con datos dentro, copiar fichero, borrarlo, hash, comparar hash.
+
+Idea: en el copiado hace una ordenación de los datos
+
+- Experiemento (a realizar):
+hash del usb con datos dentro, copiar fichero, hash, borrarlo, copiarlo, hash, comparar hash.
+
+- Experimento: 
+hash del usb con datos dentro, copiar fichero, hash, borrarlo, hash, comparar hash.
+
+- Experimento:
+copiar un fichero de poco tamaño, hash, borrar y copiar número X de veces, hash, comparar.
+
+Todos los experimentos se han realizado posteriormente con un desmontado y montado, antes de crear el hash final, por si el montaje cambiaba el resultado.
+
+TODO: puede ser que si copias un archivo de 4k, lo borras, y copias otro distinto, este se coloque en el lugar del primero, o en otro sitio distinto ?
+
+- Experiemento:
+el borrado de un archivo implica cambios fisicos? en teoria se borra solamente el archivo de la tabla de nombres, crear iso y comparar.
+
+**** Vida util de un sector
+*** Código
+(los script realizados comentado su funcionamiento)
+** Capitulo 5
+*** Conclusiones
+*** Lineas futuras?
+** Apendice A
+usar la latex con emacs y plantilla para proyecto
+
+* Anteproyecto
+  
