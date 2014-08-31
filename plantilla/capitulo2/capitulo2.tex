@@ -1,7 +1,7 @@
 \chapter{Antecedentes}
 \section{Estado del arte}
 
-\subsection{Descripción de equipos}
+\subsection{DescripciÃ³n de equipos}
 Para poder realizar los experimentos hemos contado con dos equipos en el laboratorio. Son dos equipos con procesador AMD Phenom (tm) X6 1055T y 7'6 GiB de RAM. En ellos hemos instalado Debian 6.0.6, que viene con el kernel 2.6.32-5-amd64.
 
 Ambos dos forman parte de una red interna de \url{gf.tel.uva.es}, teniendo cada uno de ellos los siguientes hostnames:
@@ -12,37 +12,39 @@ Ambos dos forman parte de una red interna de \url{gf.tel.uva.es}, teniendo cada 
 \end{itemize}
 \setlength{\parskip}{4mm}
 
-Como esta red no está accesible desde el exterior de la escuela, para poder trabajar desde casa y tener monitorizado el trabajo, hemos recurrido a los tuneles ssh y al commando screen de Linux, que detallamo en la siguiente sección \ref{subsec:ComoTrabajarDesdeFueraETSiT}.
+Como esta red no estÃ¡ accesible desde el exterior de la escuela, para poder trabajar desde casa y tener monitorizado el trabajo, hemos recurrido a los tuneles ssh y al commando screen de Linux, que detallamo en la siguiente secciÃ³n \ref{subsec:ComoTrabajarDesdeFueraETSiT}.
 
-\subsection{Características de la memoria}
+\subsection{CaracterÃ­sticas de la memoria}
 
-La diferencia entre lo que se ve desde el software y lo que fisicamente está, es algo muy importante en este Proyecto. Como ya hemos comentado, todas las memorias disponen de un controlador, y este puede recolocar los datos de manera interna, y completamente trasparente desde el exterior.
+La diferencia entre lo que se ve desde el software y lo que fisicamente estÃ¡, es algo muy importante en este Proyecto. Como ya hemos comentado, todas las memorias disponen de un controlador, y este puede recolocar los datos de manera interna, y completamente trasparente desde el exterior.
 
-Tamaño de cluster que impone fat32 \cite{fat32_1} \cite{fat32_2}
+Este tipo de memorias estÃ¡n formateadas con FAT32. FAT es un sistema de archivos desarrollado para MS-DOS. FAT32 es su Ãºltima evoluciÃ³n, utiliza direcciones de cluster de 32 KiB (aunque sÃ³lo 28 de esos KiB se utilizan realmente) y el tamaÃ±o mÃ¡ximo de un archivo en FAT32 es 4 GiB (232âˆ’1 bytes).
+
+TamaÃ±o de cluster que impone fat32 \cite{fat32_1} \cite{fat32_2}
 
 \section{Utilidades}
 
 \subsection{Comandos y herramientas utilizadas}
 \subsubsection{Comando Linux}
-En Linux existen mulitud de comandos que nos han facilitado el trabajo a la hora de realizar este Proyecto. Uno de los más importantes ha sido \verb|dd|.
+En Linux existen mulitud de comandos que nos han facilitado el trabajo a la hora de realizar este Proyecto. Uno de los mÃ¡s importantes ha sido \verb|dd|.
 \begin{itemize}
-\item \verb|dd|: \textit{Copia un fichero, convirtiendo y formateando según los operandos}.
-En principio este comando se usa para crear copias de un disco, en nuestro caso creamos archivos \verb|.iso| de las memorias USB. Pero en unas pruebas nos dimos cuenta de que tenía mayor rendimiento que el comando \verb|cp|, que es el originario de Linux para copiar ficheros, y desde ese momento lo hemos usado también para la copia ``normal''. Por defecto sus bloques de copiado son de 1024bytes y sus parámetros son los siguientes:
+\item \verb|dd|: \textit{Copia un fichero, convirtiendo y formateando segÃºn los operandos}.
+En principio este comando se usa para crear copias de un disco, en nuestro caso creamos archivos \verb|.iso| de las memorias USB. Pero en unas pruebas nos dimos cuenta de que tenÃ­a mayor rendimiento que el comando \verb|cp|, que es el originario de Linux para copiar ficheros, y desde ese momento lo hemos usado tambiÃ©n para la copia ``normal''. Por defecto sus bloques de copiado son de 1024bytes y sus parÃ¡metros son los siguientes:
 \begin{verbatim}
 $ dd if=ruta_o_fichero_entrada of=fichero_salida
 \end{verbatim}
 \item \verb|df|: \textit{Uso del espacio del sistema de ficheros}.
-Este comando te da información sobre el espacio de los dispositivos montados en el sistema. A parte de ver el espacio disponible en las memorias, principalmente se ha utilizado para ver la capacidad de las memorias y comprobar si su capacidad se ha visto recudida, ver /ref{experiementoFlash}. Nota importante:
+Este comando te da informaciÃ³n sobre el espacio de los dispositivos montados en el sistema. A parte de ver el espacio disponible en las memorias, principalmente se ha utilizado para ver la capacidad de las memorias y comprobar si su capacidad se ha visto recudida, ver /ref{experiementoFlash}. Nota importante:
 \begin{verbatim}
-$ df --block-size=kB \\ Muestra un tamaño de bloque de 1000bytes
-$ df --block-size=k \\ Muestra un tamaño de bloque de 1024bytes
+$ df --block-size=kB \\ Muestra un tamaÃ±o de bloque de 1000bytes
+$ df --block-size=k \\ Muestra un tamaÃ±o de bloque de 1024bytes
 \end{verbatim}
 \item \verb|hexdump|: \textit{Muestra el contenido de un fichero en ascii, decimal, hexadecimal, u octal}.
 Gracias a la orden:
 \begin{verbatim}
 $ hexdump -c .iso > .txt
 \end{verbatim}
-Podemos crear un archivo de texto que luego comprar con \verb|meld|, de esta manera podemos comparar imágenes \verb|iso| de forma muy fácil y ver sus diferencias.
+Podemos crear un archivo de texto que luego comprar con \verb|meld|, de esta manera podemos comparar imÃ¡genes \verb|iso| de forma muy fÃ¡cil y ver sus diferencias.
 \item \verb|iotop|: \textit{Muestra el proceso de las peticiones de lectura o escritura que implican a distintos dispositivos del sistema}.
 Gracias a este comando podemos monitorizar si una lectura o escrita a la memoria sigue en curso o murio su proceso.
 \item \verb=ls -l | wc -l=: Esta orden muestra la cantidad de elementos en un directorio, ha sido de mucha utilidad sobre todo en el experimento de /ref{tabladenombres}.
@@ -50,43 +52,43 @@ Gracias a este comando podemos monitorizar si una lectura o escrita a la memoria
 Hemos utilizado ficheros en hexadecimal, como ficheros base de lectura y escritura en este proyecto, este comando ha ayudado a visualizar esos ficheros hexadecimales.
 \end{itemize}
 \cite{manLinux}
-\cite{ProgramacióndeShellScripts}
+\cite{ProgramaciÃ³ndeShellScripts}
 
 \subsubsection{Bash y Shell script}
-\textbf{Bash} es un itérprete de órdenes, está basado en la shell de Unix y es compatible con POSIX. Su nombre viene del acrónimo ``\textit{Bourne-Again SHell}'', un juego de palabras de Stephen Bourne, el autor del antecesor de la Shell actual de Unix \cite{gnubash}. Bash dispone de una gran cantidad de comandos que te permiten hacer casi cualquier cosa \cite{indexbashcommand}.
+\textbf{Bash} es un itÃ©rprete de Ã³rdenes, estÃ¡ basado en la shell de Unix y es compatible con POSIX. Su nombre viene del acrÃ³nimo ``\textit{Bourne-Again SHell}'', un juego de palabras de Stephen Bourne, el autor del antecesor de la Shell actual de Unix \cite{gnubash}. Bash dispone de una gran cantidad de comandos que te permiten hacer casi cualquier cosa \cite{indexbashcommand}.
 
-Una \textbf{Shell} es un marco que ejecuta comandos. La Shell puede aceptar de entrada órdenes por teclado o leer instrucciones de un fichero \cite{gnubash}.
+Una \textbf{Shell} es un marco que ejecuta comandos. La Shell puede aceptar de entrada Ã³rdenes por teclado o leer instrucciones de un fichero \cite{gnubash}.
 
-Un script de Shell es una secuencia de comandos que se ejecutan uno detrás de otro, ya que es un tipo de lenguaje interpretado. Un fichero de texto con extensión \verb|.sh| al que se le da permisos de ejecución ``\verb|chmod u+x script.sh|'' ya es puede ser ejecutado en Linux.
+Un script de Shell es una secuencia de comandos que se ejecutan uno detrÃ¡s de otro, ya que es un tipo de lenguaje interpretado. Un fichero de texto con extensiÃ³n \verb|.sh| al que se le da permisos de ejecuciÃ³n ``\verb|chmod u+x script.sh|'' ya es puede ser ejecutado en Linux.
 
-Gracias a estos Shell script hemos podido automatizar procesos que podrían llevar muchos días y filtar los resultados para una mejor comprensión de los mismos.
+Gracias a estos Shell script hemos podido automatizar procesos que podrÃ­an llevar muchos dÃ­as y filtar los resultados para una mejor comprensiÃ³n de los mismos.
 
-Bash tiene algunas peculiaridades a la hora de tratar con variables que puede llamar la anteción acostumbrado a otros lenguajes de programación:
+Bash tiene algunas peculiaridades a la hora de tratar con variables que puede llamar la anteciÃ³n acostumbrado a otros lenguajes de programaciÃ³n:
 
 \begin{itemize}
 
-\item La asignación de variables se realiza sin ``declaración'': \verb|varible=valor|.
+\item La asignaciÃ³n de variables se realiza sin ``declaraciÃ³n'': \verb|varible=valor|.
 \item Para modificar esas variables se usan dobles parentesis: \verb|((variable=variable+10))|.
 \item Para usar las variables deben estar precedidas de \verb|$|: \verb|echo ``Hola'' $variable|.
 
 \end{itemize}
 
 \subsubsection{Control de versiones y Git}
-Git es una herramienta para el control de versiones. Tiene muchas virtudes, pero la más importante en este contexto es poder tener un histórico de cada cambio ``comiteado'', lo que nos permite tener una copia de seguridad casi perfecta tanto del código como de la redacción de Proyecto. En cualquier momento podemos volver a un punto anterior o ver que se cambiado de un fichero en concreto \cite{git-scm}. Todo el Proyecto se ha ido guardando en \url{github.com}, que permite crear repositorios git de manera gratuita siempre que estos sean de libre acceso, esta dirección del repositorio: \url{https://github.com/jilgue/flashcrash}.
+Git es una herramienta para el control de versiones. Tiene muchas virtudes, pero la mÃ¡s importante en este contexto es poder tener un histÃ³rico de cada cambio ``comiteado'', lo que nos permite tener una copia de seguridad casi perfecta tanto del cÃ³digo como de la redacciÃ³n de Proyecto. En cualquier momento podemos volver a un punto anterior o ver que se cambiado de un fichero en concreto \cite{git-scm}. Todo el Proyecto se ha ido guardando en \url{github.com}, que permite crear repositorios git de manera gratuita siempre que estos sean de libre acceso, esta direcciÃ³n del repositorio: \url{https://github.com/jilgue/flashcrash}.
 
-\subsection{¿Comó trabajar desde fuera de la ETSiT?}
+\subsection{Â¿ComÃ³ trabajar desde fuera de la ETSiT?}
 \label{subsec:ComoTrabajarDesdeFueraETSiT}
-Se puede tardar días en conseguir resultados, para monitorizar el proceso es necesario conectarse a los equipos y poder recuperar la shell donde tenemos lanzado el script. Para ellos nos hemos ayudado del protocolo SSH y el comando screen.
+Se puede tardar dÃ­as en conseguir resultados, para monitorizar el proceso es necesario conectarse a los equipos y poder recuperar la shell donde tenemos lanzado el script. Para ellos nos hemos ayudado del protocolo SSH y el comando screen.
 
 \subsubsection{SSH}
-SSH es un protocolo de shell remota segura. Gracias a ello podemos conectarnos al terminal de un ordenador y ejecutar ordenes en él. 
+SSH es un protocolo de shell remota segura. Gracias a ello podemos conectarnos al terminal de un ordenador y ejecutar ordenes en Ã©l. 
 
-SSH usa una autenticación con cable publico/privada. Si queremos conectarnos por SSH sin tener que escribir la contraseña cada vez, tenemos que generar una pareja de claves y añadir la publica a nuestro servidor:
+SSH usa una autenticaciÃ³n con cable publico/privada. Si queremos conectarnos por SSH sin tener que escribir la contraseÃ±a cada vez, tenemos que generar una pareja de claves y aÃ±adir la publica a nuestro servidor:
 \begin{verbatim}
 $ ssh-keygen -t rsa -b 2048
 \end{verbatim}
 
-Esto nos genera un \verb|.pub| dentro de la carpeta \verb|.ssh| y tenemos que copiar su contenido en el archivo \verb|.ssh/authorized_keys| del servidor. Con esto la próxima vez que nos conectemos no tendremos que escribir la contraseña \cite{Criptografíaasimétrica}.
+Esto nos genera un \verb|.pub| dentro de la carpeta \verb|.ssh| y tenemos que copiar su contenido en el archivo \verb|.ssh/authorized_keys| del servidor. Con esto la prÃ³xima vez que nos conectemos no tendremos que escribir la contraseÃ±a \cite{CriptografÃ­aasimÃ©trica}.
 
 \subsubsection{Tunelando con ssh}
 En la escuela tenemos una arquitectura parecida a esta \ref{fig:Esquemadered}:
@@ -103,20 +105,20 @@ Desde ``Mi equipo'' no puedo conectarme al ``Otro equipo''. Para solvertar este 
 $ ssh -L 2222:donatello:22 -L 2221:leonardo:22 usuario@gf.tel.uva.es
 \end{verbatim}
 
-Con esta linea hemos abierto un túnel desde nuestro puerto 2222 y 2221 al 22 de donatello y leonardo respectivamente a través de \url{gf.tel.uva.es}. Ahora para conectarnos a nuestro túnel escribimos en nuestro terminal:
+Con esta linea hemos abierto un tÃºnel desde nuestro puerto 2222 y 2221 al 22 de donatello y leonardo respectivamente a travÃ©s de \url{gf.tel.uva.es}. Ahora para conectarnos a nuestro tÃºnel escribimos en nuestro terminal:
 \begin{verbatim}
 $ ssh usuario@localhost -p2221 -X
 $ ssh usuario@localhost -p2222 -X
 \end{verbatim}
 
 \subsubsection{Screen}
-Screen es una herramienta que nos permite recuperar una sesión shell. Podemos dejar corriendo un script cerrar la conexión, irnos a casa, abrir una conexión nueva y recuperar la misma terminal que teníamos antes.
+Screen es una herramienta que nos permite recuperar una sesiÃ³n shell. Podemos dejar corriendo un script cerrar la conexiÃ³n, irnos a casa, abrir una conexiÃ³n nueva y recuperar la misma terminal que tenÃ­amos antes.
 
-Uso básico de \verb|screen|:
+Uso bÃ¡sico de \verb|screen|:
 \begin{verbatim}
-$ screen // abre una sesión
-Ctrl + a + d // deja la sesión en background.
-$ screen -r // recupera la sesión
+$ screen // abre una sesiÃ³n
+Ctrl + a + d // deja la sesiÃ³n en background.
+$ screen -r // recupera la sesiÃ³n
 \end{verbatim}
-\cite{Usodetúnelessshyscreen}
-\cite{UsobásicodescreenenLinux}
+\cite{UsodetÃºnelessshyscreen}
+\cite{UsobÃ¡sicodescreenenLinux}
