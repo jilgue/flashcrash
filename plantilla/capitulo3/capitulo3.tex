@@ -1,6 +1,44 @@
 \chapter{Desarrollo}
 \label{chap:cap3}
 \section{Experimentos}
+\subsection{Tamaño del bloque de memoria}
+\begin{verbatim}
+$ ./archivos_marcados_b3.sh
+$ ./tam_bloque_b2.sh
+$ dd if=datos/datosfin.txt of=/media/cesar/4F35-D764/datosfin
+$ cp datos2/datos1.txt /media/cesar/4F35-D764/datos1.txt
+$ cp datos2/datos1.txt /media/cesar/4F35-D764/datos2.txt
+$ sudo dd if=/dev/sdb1 of=tambloque.iso
+\end{verbatim}
+
+
+\subsection{Tabla de nombres}
+
+
+
+\subsection{Movimiendo de datos entre sectores}
+
+Vamos a llenar el dispositivo con un fichero con \textit{00}. Después borramos el archivo y copiamos un archivo de 64K que contiene \textit{CC}. Hacemos una imagen \verb|.iso| de la memoria, borramos el fichero, creamos otra imagen, volvemos a copiar el mismo archivo y hacemos otra imagen del dispositivo.
+\begin{verbatim}
+$ ./archivos_marcados_b3.sh
+$ ./tam_bloque_b2.sh
+$ dd if=datos/datosfin.txt of=/media/cesar/4F35-D764/datosfin.txt
+$ rm /media/cesar/4F35-D764/datosfin.txt
+$ cp datos2/datos16.txt /media/cesar/4F35-D764/
+$ sudo dd if=/dev/sdb1 of=datos16.iso
+$ rm /media/cesar/4F35-D764/datos16.txt
+$ sudo dd if=/dev/sdb1 of=datos16borrado.iso
+$ cp datos2/datos16.txt /media/cesar/4F35-D764/
+$ sudo dd if=/dev/sdb1 of=datos16copiado.iso
+\end{verbatim}
+
+Con \verb|bless| hemos visto que los datos siguen estado después de haber borrado el fichero. Pero \verb|md5sum| nos dice que las imágenes sin distintas, así que vamos a crear ficheros de texto con \verb|hexdum| para poder comparar las imágenes con \verb|meld|.
+\begin{verbatim}
+$ md5sum *
+5b47c568523dbb3bb3128e3f4193148d  datos16.iso
+5704c3cc3b5264aecfc5e5a4a54f0bf5  datos16borrado.iso
+9fbc3200e1f61767c5c0da7353fe1c72  datos16copiado.iso
+\end{verbatim}
 
 
 \section{Código}
