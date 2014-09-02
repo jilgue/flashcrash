@@ -33,7 +33,7 @@ Filesystem      1kB-blocks        Used   Available Use% Mounted on
 
 \begin{figure}[h!]
 	\centering
-		\includegraphics[height=25mm,width=1\textwidth,natwidth=610,natheight=642]{fig/errorlectura.eps}
+		\includegraphics[width=1\textwidth,natwidth=610,natheight=642]{fig/errorlectura.png}
 	\caption{\emph{Errores de lectura en la memoria}}
         \label{fig:errorlectura}
 \end{figure}
@@ -49,34 +49,48 @@ vuelta  50356020
 /dev/sde1      3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
 vuelta  50356021
 \end{verbatim}
-Lo que quiere decir que 
 
-También buscamos errores en el syslog del kernel y esta fue su salida:
+Lo que quiere decir que la capacidad de la memoria no se ha visto afecta después de 50.356.021 ciclos de escritura/borrado. También buscamos errores en el syslog del kernel y este fue el registro que obtuvimos:
+
 \begin{verbatim}
-kern.log:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)
-kern.log:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem error (dev sde1)
-kern.log:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem error (dev sde1)
-kern.log:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
-messages:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
-syslog:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)
-syslog:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem error (dev sde1)
-syslog:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem error (dev sde1)
-syslog:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+ kern.log:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: 
+Filesystem error (dev sde1)
+ kern.log:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: 
+Filesystem error (dev sde1)
+ kern.log:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: 
+Filesystem error (dev sde1)
+ kern.log:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: 
+[sde] Attached SCSI removable disk
+ messages:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: 
+[sde] Attached SCSI removable disk
+ syslog:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem 
+error (dev sde1)
+ syslog:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem 
+error (dev sde1)
+ syslog:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem 
+error (dev sde1)
+ syslog:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: 
+[sde] Attached SCSI removable disk
 \end{verbatim}
 Lo que nos da a suponer que algo del sistema de ficheros o del controlador se ha corrompido, pero la memoria sigue intacta.
 
-En otros dos casos, no conseguimos obtener datos en el momento que la memoria empezó a fallar pero quedo 
-\begin{verbatim}
-[ 4673.313154] usb 3-1: new high-speed USB device number 3 using ehci-pci
-[ 4673.444924] usb-storage 3-1:1.0: USB Mass Storage device detected
-[ 4673.446328] scsi3 : usb-storage 3-1:1.0
-\end{verbatim}
+En otros dos casos, no conseguimos obtener datos en el momento que la memoria empezó a fallar. Pero quedo completamente inservible, ya que aunque el sistema lo reconoce \ref{cod:logsistema}, ni mantiene las particiones originales \ref{cod:fdiskroto} ni se puede acceder a ella.
 
-\begin{verbatim}
-# fdisk /dev/sdc
-Device does not contain a recognized partition table.
-Created a new DOS disklabel with disk identifier 0x1670df5f.
-\end{verbatim}
+\begin{lstlisting}[caption=Log del sistema con memoria dañada,label=cod:logsistema]
+  [ 4673.313154] usb 3-1: new high-speed USB device number 3 using 
+ehci-pci
+  [ 4673.444924] usb-storage 3-1:1.0: USB Mass Storage device 
+detected
+  [ 4673.446328] scsi3 : usb-storage 3-1:1.0
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single,caption=Salida del fdisk,label=cod:fdiskroto]
+  # fdisk /dev/sdc
+  Device does not contain a recognized partition table.
+  Created a new DOS disklabel with disk identifier 0x1670df5f.
+\end{lstlisting}
+
+
 
 \begin{verbatim}
 $ df
