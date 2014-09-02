@@ -18,6 +18,73 @@ $ sudo dd if=/dev/sdb1 of=tambloque.iso
 
 \subsection{Movimiendo de datos entre sectores}
 
+\subsection{Vida útil}
+
+Después de varias pruebas con el script \verb|flash_b2.sh| y \verb|flash_b3.sh| no conseguimos el resultado esperado, que es obtener datos para generar una gráfica que muestre como disminuye la capacidad según se van deteriorando bloques de memoria.
+
+Al principio pensamos que como este tipo de memorias tienen bloques reservados para que el deterioro de la capacidad no se vea reflejado, pues nosotros tampoco erámos capaces de verlo. Entonces hicimos pruebas más largas para evitar este posible problema. Pero solo conseguimos que la memoria diese errores de entrada/salida y la memoria dejase de estar accesible \ref{fig:errorlectura}.
+
+En una prueba con una memoria con este estado inicial:
+\begin{verbatim}
+$ df --block-size=KB
+Filesystem      1kB-blocks        Used   Available Use% Mounted on
+/dev/sde1        3924005kB         5kB   3924000kB   1% /media/cesar/usb3
+\end{verbatim}
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[height=25mm,width=1\textwidth,natwidth=610,natheight=642]{fig/errorlectura.eps}
+	\caption{\emph{Errores de lectura en la memoria}}
+        \label{fig:errorlectura}
+\end{figure}
+
+Estas fueron las últimas líneas del log donde vamos apuntado cada ciclo de escritura/borrado:
+\begin{verbatim}
+$ tail stam.txt
+Filesystem     1K-blocks      Used Available Use% Mounted on
+/dev/sde1      3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
+vuelta  50356019
+/dev/sde1      3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
+vuelta  50356020
+/dev/sde1      3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
+vuelta  50356021
+\end{verbatim}
+Lo que quiere decir que 
+
+También buscamos errores en el syslog del kernel y esta fue su salida:
+\begin{verbatim}
+kern.log:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)
+kern.log:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem error (dev sde1)
+kern.log:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem error (dev sde1)
+kern.log:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+messages:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+syslog:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)
+syslog:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem error (dev sde1)
+syslog:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem error (dev sde1)
+syslog:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+\end{verbatim}
+Lo que nos da a suponer que algo del sistema de ficheros o del controlador se ha corrompido, pero la memoria sigue intacta.
+
+En otros dos casos, no conseguimos obtener datos en el momento que la memoria empezó a fallar pero quedo 
+\begin{verbatim}
+[ 4673.313154] usb 3-1: new high-speed USB device number 3 using ehci-pci
+[ 4673.444924] usb-storage 3-1:1.0: USB Mass Storage device detected
+[ 4673.446328] scsi3 : usb-storage 3-1:1.0
+\end{verbatim}
+
+\begin{verbatim}
+# fdisk /dev/sdc
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0x1670df5f.
+\end{verbatim}
+
+\begin{verbatim}
+$ df
+Filesystem     1K-blocks      Used Available Use% Mounted on
+/dev/sdc1        3831940    716640   3115300  19% /media/cesar/usb1
+\end{verbatim}
+
+
 Vamos a llenar el dispositivo con un fichero con \textit{00}. Después borramos el archivo y copiamos un archivo de 64K que contiene \textit{CC}. Hacemos una imagen \verb|.iso| de la memoria, borramos el fichero, creamos otra imagen, volvemos a copiar el mismo archivo y hacemos otra imagen del dispositivo.
 \begin{verbatim}
 $ ./archivos_marcados_b3.sh
