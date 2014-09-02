@@ -21,6 +21,13 @@
 \usepackage[Lenny]{fncychap}
 \usepackage{url}
 \usepackage{listings} %Permite añadir código
+\lstset{language=bash,
+           basicstyle=\ttfamily,
+           keywordstyle=\color{blue}\ttfamily,
+           stringstyle=\color{red}\ttfamily,
+           commentstyle=\color{green}\ttfamily,
+           breaklines=true
+          }
 %\usepackage{eurofont}%Permite usar el símbolo de euro
  \pagestyle{fancy}
 %\addtolength{\footskip}{+3cm}
@@ -57,7 +64,7 @@
 %Agradecimientos
 %==============================================================
 \thispagestyle{plain}
-\input{Agradecimientos/Agradecimientos}
+%\input{Agradecimientos/Agradecimientos}
 \newpage
 \thispagestyle{empty}\cleardoublepage
 
