@@ -18,18 +18,15 @@ $ sudo dd if=/dev/sdb1 of=tambloque.iso
 
 \subsection{Movimiendo de datos entre sectores}
 
+
+
 \subsection{Vida útil}
 
-Después de varias pruebas con el script \verb|flash_b2.sh| y \verb|flash_b3.sh| no conseguimos el resultado esperado, que es obtener datos para generar una gráfica que muestre como disminuye la capacidad según se van deteriorando bloques de memoria.
+Después de varias pruebas con el script \verb|flash_b2.sh| \ref{cod:flash_b2} y \verb|flash_b3.sh| \ref{cod:flash_b3} no conseguimos el resultado esperado, que es obtener datos para generar una gráfica que muestre como disminuye la capacidad según se van deteriorando bloques de memoria.
 
-Al principio pensamos que como este tipo de memorias tienen bloques reservados para que el deterioro de la capacidad no se vea reflejado, pues nosotros tampoco erámos capaces de verlo. Entonces hicimos pruebas más largas para evitar este posible problema. Pero solo conseguimos que la memoria diese errores de entrada/salida y la memoria dejase de estar accesible \ref{fig:errorlectura}.
+Al principio pensamos que como este tipo de memorias tienen bloques reservados para que el deterioro de la capacidad no se vea reflejado, pues nosotros tampoco erámos capaces de verlo. Entonces hicimos pruebas más largas para evitar este posible problema. Pero solo conseguimos que la memoria diese errores de entrada/salida y la memoria dejase de estar accesible Figura \ref{fig:errorlectura}.
 
-En una prueba con una memoria con este estado inicial:
-\begin{verbatim}
-$ df --block-size=KB
-Filesystem      1kB-blocks        Used   Available Use% Mounted on
-/dev/sde1        3924005kB         5kB   3924000kB   1% /media/cesar/usb3
-\end{verbatim}
+En una prueba con una memoria con el estado inicial, Listing \ref{cod:estadoinicialmemoria}, llegamos a realizar 50.356.021 ciclos de escritura/borrado antes de registrar algún error. Como se puede ver en las últimas líneas del log \ref{cod:flashFinal2} del script donde vamos apuntado cada ciclo de escritura/borrado y el estado de la memoria.
 
 \begin{figure}[h!]
 	\centering
@@ -38,43 +35,38 @@ Filesystem      1kB-blocks        Used   Available Use% Mounted on
         \label{fig:errorlectura}
 \end{figure}
 
-Estas fueron las últimas líneas del log donde vamos apuntado cada ciclo de escritura/borrado:
-\begin{verbatim}
+\begin{lstlisting}[caption=Estado inicial de la memoria,label=cod:estadoinicialmemoria]
+$ df --block-size=KB
+Filesystem 1kB-blocks  Used   Available Use\% Mounted on
+/dev/sde1   3924005kB  5kB    3924000kB   1\% /media/cesar/usb3
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Log del script \ref{cod:flash_b2},label=cod:flashFinal2]
 $ tail stam.txt
-Filesystem     1K-blocks      Used Available Use% Mounted on
-/dev/sde1      3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
+Filesystem     1K-blocks      Used Available Use\% Mounted on
+/dev/sde1      3924005kB 2189669kB 1734337kB  56\% /media/74A8-CE74
 vuelta  50356019
-/dev/sde1      3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
+/dev/sde1      3924005kB 2189669kB 1734337kB  56\% /media/74A8-CE74
 vuelta  50356020
-/dev/sde1      3924005kB 2189669kB 1734337kB  56% /media/74A8-CE74
+/dev/sde1      3924005kB 2189669kB 1734337kB  56\% /media/74A8-CE74
 vuelta  50356021
-\end{verbatim}
+\end{lstlisting}
 
-Lo que quiere decir que la capacidad de la memoria no se ha visto afecta después de 50.356.021 ciclos de escritura/borrado. También buscamos errores en el syslog del kernel y este fue el registro que obtuvimos:
+Lo que quiere decir, que la capacidad de la memoria no se ha visto afecta después de 50.356.021 ciclos de escritura/borrado. También buscamos errores en el syslog del kernel y este fue el registro que obtuvimos \ref{cod:logkernel}. Lo que nos da a suponer que algo del sistema de ficheros o del controlador se ha corrompido, pero la memoria sigue intacta.
 
-\begin{verbatim}
- kern.log:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: 
-Filesystem error (dev sde1)
- kern.log:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: 
-Filesystem error (dev sde1)
- kern.log:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: 
-Filesystem error (dev sde1)
- kern.log:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: 
-[sde] Attached SCSI removable disk
- messages:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: 
-[sde] Attached SCSI removable disk
- syslog:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem 
-error (dev sde1)
- syslog:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem 
-error (dev sde1)
- syslog:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem 
-error (dev sde1)
- syslog:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: 
-[sde] Attached SCSI removable disk
-\end{verbatim}
-Lo que nos da a suponer que algo del sistema de ficheros o del controlador se ha corrompido, pero la memoria sigue intacta.
+\begin{lstlisting}[caption=Log del kernel cuando se produce el error en el sistema de ficheros,label=cod:logkernel]
+ kern.log:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)
+ kern.log:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem error (dev sde1)
+ kern.log:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem error (dev sde1)
+ kern.log:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+ messages:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+ syslog:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)
+ syslog:May 15 19:32:56 donatello kernel: [1699652.972408] FAT: Filesystem error (dev sde1)
+ syslog:May 15 19:32:56 donatello kernel: [1699652.972426] FAT: Filesystem error (dev sde1)
+ syslog:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
+\end{lstlisting}
 
-En otros dos casos, no conseguimos obtener datos en el momento que la memoria empezó a fallar. Pero quedo completamente inservible, ya que aunque el sistema lo reconoce \ref{cod:logsistema}, ni mantiene las particiones originales \ref{cod:fdiskroto} ni se puede acceder a ella.
+En otros dos casos, no conseguimos obtener datos en el momento que la memoria empezó a fallar. Pero quedo completamente inservible, ya que aunque el sistema lo reconoce \ref{cod:logsistema}, ni mantiene las particiones originales \ref{cod:fdiskroto}, ni se puede acceder a ella.
 
 \begin{lstlisting}[caption=Log del sistema con memoria dañada,label=cod:logsistema]
   [ 4673.313154] usb 3-1: new high-speed USB device number 3 using 
@@ -84,12 +76,11 @@ detected
   [ 4673.446328] scsi3 : usb-storage 3-1:1.0
 \end{lstlisting}
 
-\begin{lstlisting}[frame=single,caption=Salida del fdisk,label=cod:fdiskroto]
+\begin{lstlisting}[caption=Salida del fdisk,label=cod:fdiskroto]
   # fdisk /dev/sdc
   Device does not contain a recognized partition table.
   Created a new DOS disklabel with disk identifier 0x1670df5f.
 \end{lstlisting}
-
 
 
 \begin{verbatim}
@@ -124,7 +115,7 @@ $ md5sum *
 
 \section{Código}
 \verb|archivos_marcados_b3.sh|
-\begin{lstlisting}
+\begin{lstlisting}[caption=Script que genera datos de varios tamaños,label=cod:archivos_marcados_b3]
 #
 # Crea ficheros de todos los tamaños posibles hasta llegar a 'valor_final'
 #
@@ -160,7 +151,7 @@ done
 
 
 \verb|flash_b2.sh|
-\begin{lstlisting}
+\begin{lstlisting}[caption=Script para flashear una memoria con un fichero un gran número de veces,label=cod:flash_b2]
 #
 # 
 #
@@ -204,7 +195,7 @@ done
 
 
 \verb|flash_b3.sh|
-\begin{lstlisting}
+\begin{lstlisting}[caption=Script para flashear una memoria con un archivo fácil de encontrar,label=cod:flash_b3]
 #
 # Crea un fichero con un texto reconocible y su numero de serie
 #
@@ -258,7 +249,7 @@ done
 \end{lstlisting}
 
 \verb|mount.sh|
-\begin{lstlisting}
+\begin{lstlisting}[caption=Script para verificar si en el montado y desmontado existe movimiento de datos,label=cod:mount]
 rm md5.txt
 
 for (( a=1 ; a<999999999999999 ; a++ ))
@@ -272,7 +263,7 @@ done
 \end{lstlisting}
 
 \verb|tam_bloque_b1.sh|
-\begin{lstlisting}
+\begin{lstlisting}[caption=Script para generar ficheros de un tamaño concreto,label=cod:tam_bloque_b1]
 df --block-size=KiB | grep sdb1 > tam.txt
 tam_final=$(cut -c56-63 tam.txt)
 echo $tam_final
@@ -311,7 +302,7 @@ echo $total
 \end{lstlisting}
 
 \verb|tam_bloque_b2.sh|
-\begin{lstlisting}
+\begin{lstlisting}[caption=Script para generar ficheros de un tamaño concreto,label=cod:tam_bloque_b2]
 ((valor_final=3907388))
 #((valor_final=3907388/4))
 ((valor_final_bits=valor_final*1024))
