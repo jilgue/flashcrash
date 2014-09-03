@@ -2,6 +2,32 @@
 \label{chap:cap3}
 \section{Experimentos}
 \subsection{Tamaño del bloque de memoria}
+Como hemos visto anteriormente, la memoria se divide en bloques o sectores. Por las especificaciones del sistema de ficheros, sección \ref{subsec:característicasmemoria}, el tamaño de bloque que manajemos desde el sistema operativo es de 4K. Al no haber encontrado las especificaciones físicas de la memoria, hemos realizado una serie de experimento de ingeniería inversa para tratar de averiguar cúal es el tamaño del sector físico de memoria.
+
+Hicimos varios experimentos, como llenar todo el disco menos 8K, escribir un fichero de 8K, borrarlo, escribir uno de 6K y buscar si quedaban restos del de 8. Nos dimos cuenta de que los 2K restantes estan intactos, como veremos más adelante, los datos y las referias a esos datos se guardan en zonas distintas, sección \ref{subsec:tablanombres}, y al repetir el mismo experimento, los datos habían sido recolocados. Por lo que este método no iba a darnos resultados válidos y por lo tanto no pudimos obtener las conclusiones que queríamos.
+
+Como la idea inicial no funcionó, probamos a mirarlo al revés, copiamos un archivo de un byte y miramos si había cambiado algo más. Para ello primero llenamos el disco con un fichero de  \textit{00} en hexadecimal, y después lo formateamos, código \ref{cod:copiar00formatear}, de esta manera la memoria se queda ``limpia'' para poder tener resultados más fácilmente interpretables. Después de hacer una copia de su imagen actual, copiamos un archivo de un byte con \textit{CC} en hexadecimal. Pero al abrir la imagen con \verb|bless| vimos que no había nada cambiado al rededor de los datos del fichero como podríamos haber podido esperar. 
+
+\lstset{language=bash,
+  basicstyle=\ttfamily,
+  commentstyle=\color{black}\ttfamily,
+  breaklines=true
+}
+\begin{lstlisting}[caption=Limpiado y formateo de memoria,label=cod:copiar00formatear]
+$ ./tam_bloque_b2.sh
+$ dd if=datos/datosfin.txt of=/media/cesar/usb2/datos.txt
+# umount usb2
+# mkfs.vfat /dev/sdc1
+# mount -o gid=1000,uid=1000 /dev/sdc1 usb2
+\end{lstlisting}
+\lstset{language=bash,
+  basicstyle=\ttfamily,
+  commentstyle=\color{green}\ttfamily,
+  breaklines=true
+}
+
+Por último probamos a grabar dos archivos de 2 bytes y mirar ``cúanto'' se separan. El tamaño de bloque será el espacio que queda entre ambos ficheros en memoria.
+
 \begin{verbatim}
 $ ./archivos_marcados_b3.sh
 $ ./tam_bloque_b2.sh
@@ -11,9 +37,51 @@ $ cp datos2/datos1.txt /media/cesar/4F35-D764/datos2.txt
 $ sudo dd if=/dev/sdb1 of=tambloque.iso
 \end{verbatim}
 
+Al copiar los veces el mismo archivo tuvimos el problema que no encontrábamos los archivos, así que lo repetimos pero el segundo archivo que copiamos contenia \textit{BB}. Pero nos encontramos con otro problema, \verb|bless| solo encontraba el fichero con los datos \textit{CC}, figura \ref{fig:tambloqueCC}, pero no el que contenia \textit{BB}.
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/tambloqueCC.png}
+	\caption{\emph{Fichero con CC para calcular el tamaño de sector}}
+        \label{fig:tambloqueCC}
+\end{figure}
+
+Así que repetimos el experimento, después de haber aplicado el proceso de limpieza, código \ref{cod:copiar00formatear}, copiando dos ficheros con distintos datos, código \ref{cod:ficherosbbcc}. Y este fue el resultado de que obtuvimos:
+
+Lo primero que encontramos es la tabla de nombre con la referencia a los ficheros, figura \ref{fig:nombreCCBBtamVacio}, veremos más sobre cómo funciona esta tabla en la sección \ref{subsec:tablanombres}. Como puede verse en las figuras \ref{fig:datosCCtamVacio} y \ref{fig:datosBBtamVacio} los datos empiezan en la posición 7692288 y 7696384 respectivamente, hemos puesto el offset de \verb|bless| para que muestre la posición de bit, por lo que su separación es de 4096 bits, que es lo mismo a 4Kbytes. Por lo que el controlador no recoloca los datos en este sentido, respeta el tamaño de bloque que tiene el sistema de ficheros Fat32 que como ya hemos visto es de 4K.
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/nombreCCBBtamVacio.png}
+	\caption{\emph{Tabla de nombre con los ficheros}}
+        \label{fig:nombreCCBBtamVacio}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/datosCCtamVacio.png}
+	\caption{\emph{Fichero con CC para calcular el tamaño de sector}}
+        \label{fig:datosCCtamVacio}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/datosBBtamVacio.png}
+	\caption{\emph{Fichero con BB para calcular el tamaño de sector}}
+        \label{fig:datosBBtamVacio}
+\end{figure}
+
+\begin{lstlisting}[caption=Creación de ficheros con datos distintos para el tamaño de bloque,label=cod:ficherosbbcc]
+$ echo -e -n ``\xBB'' > datosBB.txt
+$ cat datosBB.txt >> datosBBBB.txt
+$ cat datosBB.txt >> datosBBBB.txt
+$ echo -e -n ``\xCC'' > datosCC.txt
+$ cat datosCC.txt >> datosCCCC.txt
+$ cat datosCC.txt >> datosCCCC.txt
+\end{lstlisting}
 
 \subsection{Tabla de nombres}
-
+\label{subsec:tablanombres}
 
 
 \subsection{Movimiendo de datos entre sectores}
@@ -76,12 +144,21 @@ detected
   [ 4673.446328] scsi3 : usb-storage 3-1:1.0
 \end{lstlisting}
 
+\lstset{language=bash,
+  basicstyle=\ttfamily,
+  commentstyle=\color{black}\ttfamily,
+  breaklines=true
+}
 \begin{lstlisting}[caption=Salida del fdisk,label=cod:fdiskroto]
   # fdisk /dev/sdc
   Device does not contain a recognized partition table.
   Created a new DOS disklabel with disk identifier 0x1670df5f.
 \end{lstlisting}
-
+\lstset{language=bash,
+  basicstyle=\ttfamily,
+  commentstyle=\color{green}\ttfamily,
+  breaklines=true
+}
 
 \begin{verbatim}
 $ df
@@ -111,7 +188,6 @@ $ md5sum *
 5704c3cc3b5264aecfc5e5a4a54f0bf5  datos16borrado.iso
 9fbc3200e1f61767c5c0da7353fe1c72  datos16copiado.iso
 \end{verbatim}
-
 
 \section{Código}
 \verb|archivos_marcados_b3.sh|
