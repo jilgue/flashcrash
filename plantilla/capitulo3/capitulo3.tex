@@ -150,6 +150,16 @@ Como se puede ver en la figura \ref{fig:tablanombres5}, la tabla de nombres está
 
 \subsection{Movimiento de datos entre sectores}
 
+En esta sección partimos de la suposición inicial de que el controlador puede reordenar los datos a distintos sectores para salvaguardar la vida del conjunto, haciendo que todos se usen de manera equitativa. Para averiguar si esto es cierto vamos a realizar varios experimentos:
+
+En todos ellos es importante que la memoria contenga varios ficheros cuyos datos que comprobaremos si sufren algún tipo de movimiento.
+
+\begin{itemize}
+\item Con ayuda del script \ref{cod:mount}, determinar si el montado y desmontado del dispositivo implica algún tipo de movimiento de datos.
+\item Copiar un fichero, borrarlo, y comparar las imágenes de antes y después.
+\item Copiar varios ficheros, crear la imagen, borrarlos, volver a copiarlos y comprar imágenes.
+\item Copiar un fichero varias veces y comparar si los datos de los ficheros iniciales sufren cambios de posición.
+\end{itemize}
 
 Vamos a llenar el dispositivo con un fichero con \textit{00}. Después borramos el archivo y copiamos un archivo de 64K que contiene \textit{CC}. Hacemos una imagen \verb|.ISO| de la memoria, borramos el fichero, creamos otra imagen, volvemos a copiar el mismo archivo y hacemos otra imagen del dispositivo.
 \begin{verbatim}
@@ -172,6 +182,8 @@ $ md5sum *
 5704c3cc3b5264aecfc5e5a4a54f0bf5  datos16borrado.iso
 9fbc3200e1f61767c5c0da7353fe1c72  datos16copiado.iso
 \end{verbatim}
+
+En este punto del experimento nos encontramos con una limitación que no fuimos capaces de superar, el tamaño de las imágenes era demasiado grande para poder obtener resultados válidos. Comparar las imágenes con \verb|bless| no era viable, \verb|meld| no conseguía calcular las diferencias de los ficheros de texto con el \textit{dump} de la imagen. Dividimos esos ficheros de texto con \verb|split| pero \verb|meld| no calculaba bien las diferencias con archivos partidos. El comando \verb|cmp -l| conseguía mostrar datos pero no eran legibles ni interpretables. Y el comando \verb|diff -y| si era capaz de calcular todas las diferencias de los ficheros con el \textit{dump} pero no lo hacía bien ya que mostraba cada linea como si fuese una diferencia.
 
 \subsection{Vida útil}
 \label{subsec:experiementoFlash}
@@ -254,4 +266,24 @@ Filesystem     1K-blocks      Used Available Use% Mounted on
 /dev/sdc1        3831940    716640   3115300  19% /media/cesar/usb1
 \end{verbatim}
 
-Esto nos llevo a pensar que igual nos habíamos planteado mal esta sección, y no es la capacidad de memoria lo que disminuye con su uso, si no su espacio ``útil''. Modificamos el script para poder sacar datos más precisos siguiendo esta hipótesis pero 
+Esto nos llevo a pensar que igual nos habíamos planteado mal esta sección, y no es la capacidad de memoria lo que disminuye con su uso, si no su espacio ``útil''. Modificamos el script para poder sacar datos más precisos siguiendo esta hipótesis, que no terminamos por llevar a cabo ya que al formatear la memoria ese espacio ``en uso'' desapareció.
+
+Por último hicimos otra versión cuyo resultado fue el script \ref{cod:flash_b4}, en ella montamos y desmontamos el dispositivo antes del borrado y antes de la escritura, para asegurarnos que los datos que se están escribiendo llegan a materializarse en la memoria.
+
+En la figura \ref{fig:flash1} puede verse el inicio de una de las pruebas para determinar la vida útil de una memoria y en la figura \ref{fig:flash2} como tras X vueltas la capacidad y su espacio disponible no han variado. Por lo que no conseguimos los resultados esperados.
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.8\textwidth,natwidth=610,natheight=642]{fig/flash1.png}
+	\caption{\emph{Inicio de una prueba para determinar la vida de una memoria}}
+        \label{fig:flash1}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.8\textwidth,natwidth=610,natheight=642]{fig/flash1.png}
+	\caption{\emph{Estado de la prueba para determinar la vida de una memoria tras X vueltas}}
+        \label{fig:flash2}
+\end{figure}
+
+\newpage
