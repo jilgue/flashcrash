@@ -13,29 +13,31 @@ Ambos dos forman parte de una red interna de \url{gf.tel.uva.es}, teniendo cada 
 \end{itemize}
 \setlength{\parskip}{4mm}
 
-Como esta red no está accesible desde el exterior de la escuela, para poder trabajar desde casa y tener monitorizado el trabajo, hemos recurrido a los tuneles ssh y al commando screen de Linux, que detallamo en la siguiente sección \ref{subsec:ComoTrabajarDesdeFueraETSiT}.
+Como esta red no está accesible desde el exterior de la escuela, para poder trabajar desde casa y tener monitorizado el trabajo, hemos recurrido a los túneles ssh y al comando screen de Linux, que detallamos en la siguiente sección \ref{subsec:ComoTrabajarDesdeFueraETSiT}.
 
 \subsection{Características de la memoria}
 \label{subsec:característicasmemoria}
-La diferencia entre lo que se ve desde el software y lo que fisicamente está, es algo muy importante en este Proyecto. Como ya hemos comentado, todas las memorias disponen de un controlador, y este puede recolocar los datos de manera interna, y completamente trasparente desde el exterior.
+La diferencia entre lo que se ve desde el software y lo que físicamente está en la memoria, es algo muy importante en este Proyecto. Como ya hemos comentado, todas las memorias disponen de un controlador, y este puede recolocar los datos de manera interna, y completamente trasparente desde el exterior. El controlador que utiliza es un \textit{Alcor AU6989ANHL}. Sobre el controlador no hemos encontrado mucha información ya que esta normalmente suele ser privativa de la empresa que lo diseña.
 
-Este tipo de memorias están formateadas con FAT32. FAT es un sistema de archivos desarrollado para MS-DOS. FAT32 es su última evolución, utiliza direcciones de cluster de 32 KiB (aunque sólo 28 de esos KiB se utilizan realmente) y el tamaño máximo de un archivo en FAT32 es 4Gigabyte.
+La memoria Flash con la que hemos trabajado ha sido es una \textit{BIWIN BW29F64G08CBABA}, que son de tipo \textit{Micron 20nm MLC Flash}. Las memorias MLC (Multi-level cell) tienen la capacidad de guardar más de un bit de información, solo se da en las NAND Flash y permite guardar más información usando el mismo número de transistores \cite{Multilevelcell}. Salvo en dispositivos de red, las memorias MLC son de las más extendidas \cite{TLCMLCandSLCDevices}.
 
-Tamaño de cluster que impone fat32 \cite{fat32_1} \cite{fat32_2}
+Este tipo de memorias están formateadas con FAT32. FAT es un sistema de archivos desarrollado para MS-DOS. FAT32 es su última evolución, utiliza direcciones de cluster de 32 KiB (aunque sólo 28 de esos KiB se utilizan realmente) y el tamaño máximo de un archivo en FAT32 es 4Giga byte.
+
+Tamaño de cluster que impone Fat32 es de 4K en memorias de hasta 8GB, \cite{fat32_2}, y esto puede llegar a ser una limitación a la hora de obtener datos fiables de nuestros experimentos, pues no sabemos cómo puede o no condicionarnos.
 
 \section{Utilidades}
 
 \subsection{Comandos y herramientas utilizadas}
 \subsubsection{Comando Linux}
-En Linux existen mulitud de comandos que nos han facilitado el trabajo a la hora de realizar este Proyecto. Uno de los más importantes ha sido \verb|dd|.
+En Linux existen multitud de comandos que nos han facilitado el trabajo a la hora de realizar este Proyecto. Uno de los más importantes ha sido \verb|dd|.
 \begin{itemize}
 \item \verb|dd|: \textit{Copia un fichero, convirtiendo y formateando según los operandos}.
-En principio este comando se usa para crear copias de un disco, en nuestro caso creamos archivos \verb|.iso| de las memorias USB. Pero en unas pruebas nos dimos cuenta de que tenía mayor rendimiento que el comando \verb|cp|, que es el originario de Linux para copiar ficheros, y desde ese momento lo hemos usado también para la copia ``normal''. Por defecto sus bloques de copiado son de 1024bytes y sus parámetros son los siguientes:
+En principio este comando se usa para crear copias de un disco, en nuestro caso creamos archivos \verb|.ISO| de las memorias USB. Pero en unas pruebas nos dimos cuenta de que tenía mayor rendimiento que el comando \verb|cp|, que es el originario de Linux para copiar ficheros, y desde ese momento lo hemos usado también para la copia ``normal''. Por defecto sus bloques de copiado son de 1024bytes y sus parámetros son los siguientes:
 \begin{verbatim}
 $ dd if=ruta_o_fichero_entrada of=fichero_salida
 \end{verbatim}
 \item \verb|df|: \textit{Uso del espacio del sistema de ficheros}.
-Este comando te da información sobre el espacio de los dispositivos montados en el sistema. A parte de ver el espacio disponible en las memorias, principalmente se ha utilizado para ver la capacidad de las memorias y comprobar si su capacidad se ha visto recudida, ver /ref{experiementoFlash}. Nota importante:
+Este comando te da información sobre el espacio de los dispositivos montados en el sistema. A parte de ver el espacio disponible en las memorias, principalmente se ha utilizado para ver la capacidad de las memorias y comprobar si su capacidad se ha visto recudida, ver \ref{subsec:experiementoFlash}. Nota importante:
 \begin{verbatim}
 $ df --block-size=kB \\ Muestra un tamaño de bloque de 1000bytes
 $ df --block-size=k \\ Muestra un tamaño de bloque de 1024bytes
@@ -47,7 +49,7 @@ $ hexdump -c .iso > .txt
 \end{verbatim}
 Podemos crear un archivo de texto que luego comprar con \verb|meld|, de esta manera podemos comparar imágenes \verb|iso| de forma muy fácil y ver sus diferencias.
 \item \verb|iotop|: \textit{Muestra el proceso de las peticiones de lectura o escritura que implican a distintos dispositivos del sistema}.
-Gracias a este comando podemos monitorizar si una lectura o escrita a la memoria sigue en curso o murio su proceso.
+Gracias a este comando podemos monitorizar si una lectura o escrita a la memoria sigue en curso o murió su proceso.
 \item \verb=ls -l | wc -l=: Esta orden muestra la cantidad de elementos en un directorio, ha sido de mucha utilidad sobre todo en el experimento de /ref{tabladenombres}.
 \item \verb|od -x .txt|: \textit{Muestra un fichero en octal y otros formatos}.
 Hemos utilizado ficheros en hexadecimal, como ficheros base de lectura y escritura en este proyecto, este comando ha ayudado a visualizar esos ficheros hexadecimales.
@@ -56,20 +58,20 @@ Hemos utilizado ficheros en hexadecimal, como ficheros base de lectura y escritu
 \cite{ProgramacióndeShellScripts}
 
 \subsubsection{Bash y Shell script}
-\textbf{Bash} es un itérprete de órdenes, está basado en la shell de Unix y es compatible con POSIX. Su nombre viene del acrónimo ``\textit{Bourne-Again SHell}'', un juego de palabras de Stephen Bourne, el autor del antecesor de la Shell actual de Unix \cite{gnubash}. Bash dispone de una gran cantidad de comandos que te permiten hacer casi cualquier cosa \cite{indexbashcommand}.
+\textbf{Bash} es un interprete de órdenes, está basado en la shell de Unix y es compatible con POSIX. Su nombre viene del acrónimo ``\textit{Bourne-Again SHell}'', un juego de palabras de Stephen Bourne, el autor del antecesor de la Shell actual de Unix \cite{gnubash}. Bash dispone de una gran cantidad de comandos que te permiten hacer casi cualquier cosa \cite{indexbashcommand}.
 
 Una \textbf{Shell} es un marco que ejecuta comandos. La Shell puede aceptar de entrada órdenes por teclado o leer instrucciones de un fichero \cite{gnubash}.
 
 Un script de Shell es una secuencia de comandos que se ejecutan uno detrás de otro, ya que es un tipo de lenguaje interpretado. Un fichero de texto con extensión \verb|.sh| al que se le da permisos de ejecución ``\verb|chmod u+x script.sh|'' ya es puede ser ejecutado en Linux.
 
-Gracias a estos Shell script hemos podido automatizar procesos que podrían llevar muchos días y filtar los resultados para una mejor comprensión de los mismos.
+Gracias a estos Shell script hemos podido automatizar procesos que podrían llevar muchos días y filtrar los resultados para una mejor comprensión de los mismos.
 
-Bash tiene algunas peculiaridades a la hora de tratar con variables que puede llamar la anteción acostumbrado a otros lenguajes de programación:
+Bash tiene algunas peculiaridades a la hora de tratar con variables que puede llamar la atención acostumbrado a otros lenguajes de programación:
 
 \begin{itemize}
 
 \item La asignación de variables se realiza sin ``declaración'': \verb|varible=valor|.
-\item Para modificar esas variables se usan dobles parentesis: \verb|((variable=variable+10))|.
+\item Para modificar esas variables se usan dobles paréntesis: \verb|((variable=variable+10))|.
 \item Para usar las variables deben estar precedidas de \verb|$|: \verb|echo ``Hola'' $variable|.
 
 \end{itemize}
@@ -77,7 +79,7 @@ Bash tiene algunas peculiaridades a la hora de tratar con variables que puede ll
 \subsubsection{Control de versiones y Git}
 Git es una herramienta para el control de versiones. Tiene muchas virtudes, pero la más importante en este contexto es poder tener un histórico de cada cambio ``comiteado'', lo que nos permite tener una copia de seguridad casi perfecta tanto del código como de la redacción de Proyecto. En cualquier momento podemos volver a un punto anterior o ver que se cambiado de un fichero en concreto \cite{git-scm}. Todo el Proyecto se ha ido guardando en \url{github.com}, que permite crear repositorios git de manera gratuita siempre que estos sean de libre acceso, esta dirección del repositorio: \url{https://github.com/jilgue/flashcrash}.
 
-\subsection{¿Comó trabajar desde fuera de la ETSiT?}
+\subsection{¿Cómo trabajar desde fuera de la ETSiT?}
 \label{subsec:ComoTrabajarDesdeFueraETSiT}
 Se puede tardar días en conseguir resultados, para monitorizar el proceso es necesario conectarse a los equipos y poder recuperar la shell donde tenemos lanzado el script. Para ellos nos hemos ayudado del protocolo SSH y el comando screen.
 
@@ -101,7 +103,7 @@ En la escuela tenemos una arquitectura parecida a esta \ref{fig:Esquemadered}:
         \label{fig:Esquemadered}
 \end{figure}
 
-Desde ``Mi equipo'' no puedo conectarme al ``Otro equipo''. Para solvertar este problema creamos un tunel:
+Desde ``Mi equipo'' no puedo conectarme al ``Otro equipo''. Para solventar este problema creamos un túnel:
 \begin{verbatim}
 $ ssh -L 2222:donatello:22 -L 2221:leonardo:22 usuario@gf.tel.uva.es
 \end{verbatim}

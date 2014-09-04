@@ -20,7 +20,7 @@ Se dividen en dos clases según el tipo de puertas usado en su fabricación:
 \end{itemize}
 \setlength{\parskip}{4mm}
 
-En lo que al consumo energético se refiere, algo bastante importante dependiendo del dispositivo, es algo menor en las NAND cuando son usadas en aplicaciones que tiene mucha carga de escritura. Sin embargo el consumo instantaneo sin demasiada carga de trabajo es bastante parecido entre los dos tipos de memorias \cite{NANDvsNORFlashMemory}.
+En lo que al consumo energético se refiere, algo bastante importante dependiendo del dispositivo, es algo menor en las NAND cuando son usadas en aplicaciones que tiene mucha carga de escritura. Sin embargo el consumo instantáneo sin demasiada carga de trabajo es bastante parecido entre los dos tipos de memorias \cite{NANDvsNORFlashMemory}.
 
 \begin{figure}[h!]
 	\centering
@@ -37,7 +37,7 @@ Por último mencionar que este tipo de tecnología va a ser muy importante en el f
 
 \section{Motivación}
 
-Como hemos visto anteriormente, el uso de las memorias Flash está bastante extendido. La sociedad demanda dispositivos más pequeños y rápidos, y las memorias Flash se adaptan a estas necesidades. Ha habido una creciente implantación en portátiles conforme el precio por Gigabyte ha ido disminuyendo \ref{fig:US-SSD-Price} \cite{priceSSDEvolution}. 
+Como hemos visto anteriormente, el uso de las memorias Flash está bastante extendido. La sociedad demanda dispositivos más pequeños y rápidos, y las memorias Flash se adaptan a estas necesidades. Ha habido una creciente implantación en portátiles conforme el precio por Giga byte ha ido disminuyendo \ref{fig:US-SSD-Price} \cite{priceSSDEvolution}. 
 
 \begin{figure}[h!]
 	\centering
@@ -46,26 +46,26 @@ Como hemos visto anteriormente, el uso de las memorias Flash está bastante exten
         \label{fig:US-SSD-Price}
 \end{figure}
 
-Además esta tecnología supone un ahorro energético, algo también muy importante en dispotivos móviles o portables. Un artículo de la web \url{www.anandtech.com} realizan una comparación con un MacBook Air usando un disco sólido y un disco duro. En sus resultados puede verse una diferencia en el consumo energético de 0.9W en el HDD en lectura y escritura frente a 0.24/0.32W del SSD, o de un 16.8\% más de bateria usando el portatil para navegar por internet y escuchar música. El único punto donde la memoria Flash pierde es en el consumo hibernando, que el disco duro no consume energía y el diso solido 0.015W \cite{SSDonBatteryLife}.
+Además esta tecnología supone un ahorro energético, algo también muy importante en dispositivos móviles o portátiles. Un artículo de la web \url{www.anandtech.com} realizan una comparación con un MacBook Air usando un disco sólido y un disco duro. En sus resultados puede verse una diferencia en el consumo energético de 0.9W en el HDD en lectura y escritura frente a 0.24/0.32W del SSD, o de un 16.8\% más de batería usando el portátil para navegar por internet y escuchar música. El único punto donde la memoria Flash pierde es en el consumo hibernando, que el disco duro no consume energía y el disco sólido 0.015W \cite{SSDonBatteryLife}.
 
-De momento solo hemos contado las virtudes de esta tecnología, pero las memorias Flash tienen un problema: cada bloque de memoría soporta unos ciclos de escritura/borrado. Nadie quiere estar haciendo fotos con su cámara digital y que un buen día haya fotos que se pierdan, o comprarse un disco sólido de una capacidad y que después de un tiempo esa capacidad se haya visto reducida sensiblemente. Todo esto nos hace plantearnos las siguientes pregutas: ¿qué pasa cuando se usa más veces de las soportadas?, ¿cuántos ciclos son los realmente soportados?, ¿qué información queda si un bloque se rompe?, y, ¿se puede recuperar la información que había?.
+De momento solo hemos contado las virtudes de esta tecnología, pero las memorias Flash tienen un problema: cada bloque de memoria soporta unos ciclos de escritura/borrado. Nadie quiere estar haciendo fotos con su cámara digital y que un buen día haya fotos que se pierdan, o comprarse un disco sólido de una capacidad y que después de un tiempo esa capacidad se haya visto reducida sensiblemente. Todo esto nos hace plantearnos las siguientes preguntas: ¿qué pasa cuando se usa más veces de las soportadas?, ¿cuántos ciclos son los realmente soportados?, ¿qué información queda si un bloque se rompe?, y, ¿se puede recuperar la información que había?.
 
-Normalmente en la mayoría de los dispositivos con memorías Flash, el chip de memoria va acompañado de un controlador. Éste procesa los datos en la lectura y la escritura. Su presencia supondrá un problema añadido porque existirá una diferencia entre los datos que se ven desde fuera al utilizar el dispositivo, que han sido procesados por el controlador, y los datos presentes que están realmente en el chip de memoria \cite{ArchitectureForuniversal}.
+Normalmente en la mayoría de los dispositivos con memorias Flash, el chip de memoria va acompañado de un controlador. Éste procesa los datos en la lectura y la escritura. Su presencia supondrá un problema añadido porque existirá una diferencia entre los datos que se ven desde fuera al utilizar el dispositivo, que han sido procesados por el controlador, y los datos presentes que están realmente en el chip de memoria \cite{ArchitectureForuniversal}.
 
-En este proyecto hemos tratado de profundizar sobre funcionamiento de las memorias flash, sobre todo en lo que se refiere al funcionamiento interno, a bajo nivel, pero sin entrar en el hardware. En qué posiciones de memoria guarda la tabla de nombres, cómo gestiona los archivos, cúal es el tamaño que tiene un sector, cuantos ciclos de vida útil tiene un sector y qué información queda cuando un sector se deteriora.
+En este proyecto hemos tratado de profundizar sobre funcionamiento de las memorias flash, sobre todo en lo que se refiere al funcionamiento interno, a bajo nivel, pero sin entrar en el hardware. En qué posiciones de memoria guarda la tabla de nombres, cómo gestiona los archivos, cual es el tamaño que tiene un sector, cuantos ciclos de vida útil tiene un sector y qué información queda cuando un sector se deteriora.
 
-Para ello hemos realizado varios experiementos, los cuales detallamos en el Capítulo \ref{chap:cap3}.
+Para ello hemos realizado varios experimentos, los cuales detallamos en el Capítulo \ref{chap:cap3}.
 
 \section{Objetivos}
 
 \begin{itemize}
-\item  \textbf{Determinar el tamaño de sector en hardware y software}: hay que diferenciar entre lo que el sistema ve y lo que realmente está guardado en memoría. El sistema de ficheros puede tener un tamaño de bloque distinto del que físicamente tiene la memoria.
+\item  \textbf{Determinar el tamaño de sector en hardware y software}: hay que diferenciar entre lo que el sistema ve y lo que realmente está guardado en memoria. El sistema de ficheros puede tener un tamaño de bloque distinto del que físicamente tiene la memoria.
 \item  \textbf{Determinar como funciona la tabla de nombre}: en la tabla de nombres están los nombres de los ficheros que tiene guardados la memoria, ¿se guarda también un puntero al fichero? ¿esta tabla tiene algún formato especial?, son algunas de las preguntas que intentaremos resolver en este apartado.
 \item  \textbf{¿El controlador mueve datos entre bloques para alargar la vida de los mismo?}: cada bloque tiene unos ciclos de vida, si solo unos pocos están libres y siempre se usan los mismos, ¿puede el controlador mover datos a bloques que estén menos ``gastados''?.
   \begin{itemize}
   \item  \textbf{¿Un borrado implica cambios ``físicos''?}: Cuando se borra un fichero desde el sistema operativo, sus datos siguen existiendo hasta que se sobre escribe, ¿se borra también su referencia en la tabla de nombres?.
-  \item  \textbf{¿El montar y desmontar un dispositivo implica movimiento de datos?}: Puede pasar que el supuesto moviento de datos al que nos referiamos antes pase en el montado y desmontado del dispositivo.
+  \item  \textbf{¿El montar y desmontar un dispositivo implica movimiento de datos?}: Puede pasar que el supuesto movimiento de datos al que nos referíamos antes pase en el montado y desmontado del dispositivo.
   \end{itemize}
-\item  \textbf{Determinar la vida util (ciclos de vida) de un sector}: cada bloque de memoria tiene unos ciclos de borrado/escritura, vamos a determinar cuantos ciclos aguanta un bloque.
-\item  \textbf{Ver que información queda despues de un sector roto}: una vez que un bloque de memoria deja de estar reconocible por el sistema, ¿queda algún tipo de información útil en él?.
+\item  \textbf{Determinar la vida útil (ciclos de vida) de un sector}: cada bloque de memoria tiene unos ciclos de borrado/escritura, vamos a determinar cuantos ciclos aguanta un bloque.
+\item  \textbf{Ver que información queda después de un sector roto}: una vez que un bloque de memoria deja de estar reconocible por el sistema, ¿queda algún tipo de información útil en él?.
 \end{itemize}
