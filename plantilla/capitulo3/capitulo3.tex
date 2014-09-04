@@ -7,7 +7,7 @@ Como hemos visto anteriormente, la memoria se divide en bloques o sectores. Por 
 
 Hicimos varios experimentos, como llenar todo el disco menos 8K, escribir un fichero de 8K, borrarlo, escribir uno de 6K y buscar si quedaban restos del de 8. Nos dimos cuenta de que los 2K restantes están intactos, como veremos más adelante, los datos y las referencias a esos datos se guardan en zonas distintas, sección \ref{subsec:tablanombres}, y al repetir el mismo experimento, los datos habían sido recolocados. Por lo que este método no iba a darnos resultados válidos y por lo tanto no pudimos obtener las conclusiones que queríamos.
 
-Como la idea inicial no funcionó, probamos a mirarlo al revés, copiamos un archivo de un byte y miramos si había cambiado algo más. Para ello primero llenamos el disco con un fichero de  \textit{00} en hexadecimal, y después lo formateamos, código \ref{cod:copiar00formatear}, de esta manera la memoria se queda ``limpia'' para poder tener resultados más fácilmente interpretables. Después de hacer una copia de su imagen actual, copiamos un archivo de un byte con \textit{CC} en hexadecimal. Pero al abrir la imagen con \verb|bless| vimos que no había nada cambiado al rededor de los datos del fichero como podríamos haber podido esperar. 
+Como la idea inicial no funcionó, probamos a mirarlo al revés, copiamos un archivo de un byte y miramos si había cambiado algo más. Para ello primero llenamos el disco con un fichero de  \textit{00} en hexadecimal, y después lo formateamos, código \ref{cod:copiar00formatear}, de esta manera la memoria se queda ``limpia'' para poder tener resultados más fácilmente interpretables. Después de hacer una copia de su imagen actual, copiamos un archivo de un byte con \textit{CC} en hexadecimal. Pero al abrir la imagen con \verb|bless| vimos que no había nada cambiado alrededor de los datos del fichero como podríamos haber podido esperar. 
 
 \lstset{language=bash,
   basicstyle=\ttfamily,
@@ -38,37 +38,37 @@ $ cp datos2/datos1.txt /media/cesar/4F35-D764/datos2.txt
 $ sudo dd if=/dev/sdb1 of=tambloque.iso
 \end{verbatim}
 
-Al copiar los veces el mismo archivo tuvimos el problema que no encontrábamos los archivos, así que lo repetimos pero el segundo archivo que copiamos contenía \textit{BB}. Pero nos encontramos con otro problema, \verb|bless| solo encontraba el fichero con los datos \textit{CC}, figura \ref{fig:tambloqueCC}, pero no el que contenía \textit{BB}.
+Al copiar dos veces el mismo archivo tuvimos el problema de que no encontrábamos los archivos, así que lo repetimos pero el segundo archivo que copiamos contenía \textit{BB}. Pero nos encontramos con otro problema, \verb|bless| solo encontraba el fichero con los datos \textit{CC}, figura \ref{fig:tambloqueCC}, pero no el que contenía \textit{BB}.
 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/tambloqueCC.png}
-	\caption{\emph{Fichero con CC para calcular el tamaño de sector}}
+	\caption{\emph{Fichero con CC para calcular el tamaño de sector.}}
         \label{fig:tambloqueCC}
 \end{figure}
 
 Así que repetimos el experimento, después de haber aplicado el proceso de limpieza, código \ref{cod:copiar00formatear}, copiando dos ficheros con distintos datos, código \ref{cod:ficherosbbcc}. Y este fue el resultado de que obtuvimos:
 
-Lo primero que encontramos es la tabla de nombre con la referencia a los ficheros, figura \ref{fig:nombreCCBBtamVacio}, veremos más sobre cómo funciona esta tabla en la sección \ref{subsec:tablanombres}. Como puede verse en las figuras \ref{fig:datosCCtamVacio} y \ref{fig:datosBBtamVacio} los datos empiezan en la posición 7692288 y 7696384 respectivamente, hemos puesto el offset de \verb|bless| para que muestre la posición de bit, por lo que su separación es de 4096 bytes, que es lo mismo a 4Kbytes. Por lo que el controlador no recoloca los datos en este sentido, respeta el tamaño de bloque que tiene el sistema de ficheros Fat32 que como ya hemos visto es de 4K.
+Lo primero que encontramos es la tabla de nombre con la referencia a los ficheros, figura \ref{fig:nombreCCBBtamVacio}, veremos más sobre cómo funciona esta tabla en la sección \ref{subsec:tablanombres}. Como puede verse en las figuras \ref{fig:datosCCtamVacio} y \ref{fig:datosBBtamVacio} los datos empiezan en la posición 7692288 y 7696384 respectivamente, hemos puesto el offset de \verb|bless| para que muestre la posición de bit, por lo que su separación es de 4096 bytes, que es lo mismo a 4Kbytes. Por lo que el controlador no recoloca los datos en este sentido, respeta el tamaño de bloque que tiene el sistema de ficheros FAT32 que como ya hemos visto es de 4K.
 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/nombreCCBBtamVacio.png}
-	\caption{\emph{Tabla de nombre con los ficheros}}
+	\caption{\emph{Tabla de nombre con los ficheros.}}
         \label{fig:nombreCCBBtamVacio}
 \end{figure}
 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/datosCCtamVacio.png}
-	\caption{\emph{Fichero con CC para calcular el tamaño de sector}}
+	\caption{\emph{Fichero con CC para calcular el tamaño de sector.}}
         \label{fig:datosCCtamVacio}
 \end{figure}
 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/datosBBtamVacio.png}
-	\caption{\emph{Fichero con BB para calcular el tamaño de sector}}
+	\caption{\emph{Fichero con BB para calcular el tamaño de sector.}}
         \label{fig:datosBBtamVacio}
 \end{figure}
 
@@ -100,21 +100,21 @@ Después de ejecutar el script el resultado fue tras crear 32.767 el dispositivo 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/tablanombres1.png}
-	\caption{\emph{Empiece de la tabla de nombres}}
+	\caption{\emph{Empiece de la tabla de nombres.}}
         \label{fig:tablanombres1}
 \end{figure}
 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/tablanombres2.png}
-	\caption{\emph{Final de la tabla de nombres}}
+	\caption{\emph{Final de la tabla de nombres.}}
         \label{fig:tablanombres2}
 \end{figure}
 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/tablanombres3.png}
-	\caption{\emph{Siguiente tabla de nombres}}
+	\caption{\emph{Siguiente tabla de nombres.}}
         \label{fig:tablanombres3}
 \end{figure}
 
@@ -133,7 +133,7 @@ Para ello seguimos la teoría de que al ser tantos ficheros, el nombre de los fic
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/tablanombres4.png}
-	\caption{\emph{Último fichero antes de llenarse la memoria}}
+	\caption{\emph{Último fichero antes de llenarse la memoria.}}
         \label{fig:tablanombres4}
 \end{figure}
 
@@ -142,7 +142,7 @@ Como se puede ver en la figura \ref{fig:tablanombres5}, la tabla de nombres está
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.9\textwidth,natwidth=610,natheight=642]{fig/tablanombres5.png}
-	\caption{\emph{Tabla de nombres llena con 65535 ficheros}}
+	\caption{\emph{Tabla de nombres llena con 65535 ficheros.}}
         \label{fig:tablanombres5}
 \end{figure}
 
@@ -188,16 +188,16 @@ En este punto del experimento nos encontramos con una limitación que no fuimos c
 \subsection{Vida útil}
 \label{subsec:experiementoFlash}
 
-Después de varias pruebas con el script \verb|flash_b2.sh| \ref{cod:flash_b2} y \verb|flash_b3.sh| \ref{cod:flash_b3} no conseguimos el resultado esperado, que es obtener datos para generar una gráfica que muestre como disminuye la capacidad según se van deteriorando bloques de memoria.
+Después de varias pruebas con el script \verb|flash_b2.sh| \ref{cod:flash_b2} y \verb|flash_b3.sh| \ref{cod:flash_b3} no conseguimos el resultado esperado, que es obtener datos para generar una gráfica que muestre cómo disminuye la capacidad según se van deteriorando bloques de memoria.
 
-Al principio pensamos que como este tipo de memorias tienen bloques reservados para que el deterioro de la capacidad no se vea reflejado, pues nosotros tampoco éramos capaces de verlo. Entonces hicimos pruebas más largas para evitar este posible problema. Pero solo conseguimos que la memoria diese errores de entrada/salida y la memoria dejase de estar accesible Figura \ref{fig:errorlectura}.
+Al principio pensamos que como este tipo de memorias tienen bloques reservados para que el deterioro de la capacidad no se vea reflejado, nosotros tampoco éramos capaces de verlo. Entonces hicimos pruebas más largas para evitar este posible problema. Pero solo conseguimos que la memoria diese errores de entrada/salida y la memoria dejase de estar accesible Figura \ref{fig:errorlectura}.
 
 En una prueba con una memoria con el estado inicial, código \ref{cod:estadoinicialmemoria}, llegamos a realizar 50.356.021 ciclos de escritura/borrado antes de registrar algún error. Como se puede ver en las últimas líneas del log \ref{cod:flashFinal2} del script donde vamos apuntado cada ciclo de escritura/borrado y el estado de la memoria.
 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=1\textwidth,natwidth=610,natheight=642]{fig/errorlectura.png}
-	\caption{\emph{Errores de lectura en la memoria}}
+	\caption{\emph{Errores de lectura en la memoria.}}
         \label{fig:errorlectura}
 \end{figure}
 
@@ -218,7 +218,7 @@ vuelta  50356020
 vuelta  50356021
 \end{lstlisting}
 
-Lo que quiere decir, que la capacidad de la memoria no se ha visto afecta después de 50.356.021 ciclos de escritura/borrado. También buscamos errores en el syslog del kernel y este fue el registro que obtuvimos \ref{cod:logkernel}. Lo que nos da a suponer que algo del sistema de ficheros o del controlador se ha corrompido, pero la memoria sigue intacta.
+Lo que quiere decir, que la capacidad de la memoria no se ha visto afecta después de 50.356.021 ciclos de escritura/borrado. También buscamos errores en el syslog del kernel y este fue el registro que obtuvimos \ref{cod:logkernel}, lo que nos da a suponer que algo del sistema de ficheros o del controlador se ha corrompido, pero la memoria sigue intacta.
 
 \begin{lstlisting}[caption=Log del kernel cuando se produce el error en el sistema de ficheros,label=cod:logkernel]
  kern.log:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)
@@ -232,7 +232,7 @@ Lo que quiere decir, que la capacidad de la memoria no se ha visto afecta despué
  syslog:May 15 19:51:50 donatello kernel: [1700786.560947] sd 12:0:0:0: [sde] Attached SCSI removable disk
 \end{lstlisting}
 
-En otros dos casos, no conseguimos obtener datos en el momento que la memoria empezó a fallar. Pero quedo completamente inservible, ya que aunque el sistema lo reconoce \ref{cod:logsistema}, ni mantiene las particiones originales \ref{cod:fdiskroto}, ni se puede acceder a ella.
+En otros dos casos no conseguimos obtener datos en el momento que la memoria empezó a fallar. Pero quedó completamente inservible, ya que aunque el sistema la reconoce \ref{cod:logsistema}, ni mantiene las particiones originales \ref{cod:fdiskroto}, ni se puede acceder a ella.
 
 \begin{lstlisting}[caption=Log del sistema con memoria dañada,label=cod:logsistema]
   [ 4673.313154] usb 3-1: new high-speed USB device number 3 using 
@@ -275,14 +275,14 @@ En la figura \ref{fig:flash1} puede verse el inicio de una de las pruebas para d
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.8\textwidth,natwidth=610,natheight=642]{fig/flash1.png}
-	\caption{\emph{Inicio de una prueba para determinar la vida de una memoria}}
+	\caption{\emph{Inicio de una prueba para determinar la vida de una memoria.}}
         \label{fig:flash1}
 \end{figure}
 
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.8\textwidth,natwidth=610,natheight=642]{fig/flash1.png}
-	\caption{\emph{Estado de la prueba para determinar la vida de una memoria tras X vueltas}}
+	\caption{\emph{Estado de la prueba para determinar la vida de una memoria tras X vueltas.}}
         \label{fig:flash2}
 \end{figure}
 
