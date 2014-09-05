@@ -22,9 +22,11 @@ La diferencia entre lo que se ve desde el software y lo que físicamente está en 
 
 La memoria Flash con la que hemos trabajado ha sido es una \textit{BIWIN BW29F64G08CBABA}, que son de tipo \textit{Micron 20nm MLC Flash}. Las memorias MLC (Multi-level cell) tienen la capacidad de guardar más de un bit de información, solo se da en las NAND Flash y permite guardar más información usando el mismo número de transistores \cite{Multilevelcell}. Salvo en dispositivos de red, las memorias MLC son de las más extendidas \cite{TLCMLCandSLCDevices}.
 
-Este tipo de memorias están formateadas con FAT32. FAT es un sistema de archivos desarrollado para MS-DOS. FAT32 es su última evolución, utiliza direcciones de cluster de 32 KiB (aunque sólo 28 de esos KiB se utilizan realmente) y el tamaño máximo de un archivo en FAT32 es 4Giga byte.
+Este tipo de memorias están formateadas con FAT32. FAT es un sistema de archivos desarrollado para MS-DOS. FAT32 es su última evolución, utiliza direcciones de cluster de 32 KiB (aunque sólo 28 de esos KiB se utilizan realmente) y el tamaño máximo de un archivo en FAT32 es  4 Gigabytes.
 
-Tamaño de cluster que impone Fat32 es de 4K en memorias de hasta 8GB, \cite{fat32_2}, y esto puede llegar a ser una limitación a la hora de obtener datos fiables de nuestros experimentos, pues no sabemos cómo puede o no condicionarnos.
+Tamaño de cluster que impone FAT32 es de 4K en memorias de hasta 8GB, \cite{fat32_2}, y esto puede llegar a ser una limitación a la hora de obtener datos fiables de nuestros experimentos, pues no sabemos cómo puede o no condicionarnos.
+
+\newpage
 
 \section{Utilidades}
 
