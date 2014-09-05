@@ -1,8 +1,7 @@
-
-
 \section{Código}
-\verb|archivos_marcados_b3.sh|
-\begin{lstlisting}[caption=Script que genera datos de varios tamaños,label=cod:archivos_marcados_b3]
+\subsection{Archivos marcados}
+\verb|archivos_marcados_b3.sh|: este script genera ficheros desde un byte hasta el límite que se ponga en la variable \verb|valor_final|. Se ha usado para generar datos para llenar la memoria y realizar pruebas.
+\begin{lstlisting}[caption=Script que genera datos de varios tamaños.,label=cod:archivos_marcados_b3]
 #
 # Crea ficheros de todos los tamaños posibles hasta llegar a 'valor_final'
 #
@@ -36,9 +35,11 @@ do
 done
 \end{lstlisting}
 
+\subsection{Flash}
+Cada una de las versiones de este script se ha creado con una finalidad concreta tal como describimos en cada uno de ellos.
 
-\verb|flash_b2.sh|
-\begin{lstlisting}[caption=Script para flashear una memoria con un fichero un gran número de veces,label=cod:flash_b2]
+\verb|flash_b2.sh| : su función es escribir y borrar muchas veces varios datos en una memoria, y monitorizar mediante la escritura en un log la evolución de su capacidad.
+\begin{lstlisting}[caption=Script para flashear una memoria con un fichero un gran número de veces.,label=cod:flash_b2]
 #
 # 
 #
@@ -81,8 +82,8 @@ done
 \end{lstlisting}
 
 
-\verb|flash_b3.sh|
-\begin{lstlisting}[caption=Script para flashear una memoria con un archivo fácil de encontrar,label=cod:flash_b3]
+\verb|flash_b3.sh|: esta versión se ha hecho con la idea de tener archivos fácilmente localizables dentro de la imagen de 4GB que generamos y de la cual tenemos que sacar información y resultados.
+\begin{lstlisting}[caption=Script para flashear una memoria con un archivo fácil de encontrar.,label=cod:flash_b3]
 #
 # Crea un fichero con un texto reconocible y su numero de serie
 #
@@ -135,8 +136,58 @@ echo " " >> stam.txt
 done
 \end{lstlisting}
 
-\verb|mount.sh|
-\begin{lstlisting}[caption=Script para verificar si en el montado y desmontado existe movimiento de datos,label=cod:mount]
+\verb|flash_b4.sh|: Es la última versión del script para flashear una memoria. El único cambio importante es que entre la escritura y el borrado de datos, monta y desmonta el dispositivo, con esto nos aseguramos que los datos son escritos correctamente en el disposivo. 
+\begin{lstlisting}[caption=Última versión de script para flashear una memoria.,label=cod:flash_b4]
+ruta="/media/cesar/usb3"
+sdd="sdb1"
+rm stam.txt
+for (( b=0 ; b<9999999999999999999999999 ;b++))
+do
+	let vueltas=$b
+
+for (( a=1 ; a<30 ; a++ ))
+do
+	echo "numero serie ${b}_${a}"
+	echo -e -n "numero serie ${b}_${a}" > datos/${b}_${a}datos.txt
+	for (( c=1 ; c<200 ; c++ ))
+	do
+		echo -e -n "numero serie ${b}_${a}" >> datos/${b}_${a}datos.txt
+	done
+	#cat datos/datos.txt >> datos/${b}_${a}datos.txt
+	#echo -e -n "numero serie ${b}_${a}" >> datos/${b}_${a}datos.txt
+	dd if=datos/${b}_${a}datos.txt of=${ruta}/${b}_${a}datos.txt
+	rm datos/*_*datos.txt
+done
+sudo umount ${ruta}
+echo "umount"
+sudo mount -o gid=1000,uid=1000 /dev/${sdd} ${ruta}
+echo "mount"
+rm -f ${ruta}/*datos.txt
+echo "rm"
+sudo umount ${ruta}
+echo "umount"
+sudo mount -o gid=1000,uid=1000 /dev/${sdd} ${ruta}
+echo "mount"
+
+df --block-size=KB | grep ${sdd} >> stam.txt
+
+frase="vuelta "
+echo "$frase $vueltas" >> stam.txt
+echo " " >> stam.txt
+
+echo "---------------------------------"
+echo "---------------------------------"
+echo "vuelta"
+echo $vueltas
+
+done
+
+exit
+\end{lstlisting}
+
+\subsection{Monvimiento de datos}
+\verb|mount.sh|: Este script se ha usado para comprobar si en el montado y desmontado, el dispositivo sufre algún tipo de cambio. Funciona montado y desmontado el dispositivo varias veces y creado una suma de MD5 que luego se puede comparar.
+\begin{lstlisting}[caption=Script para verificar si en el montado y desmontado existe movimiento de datos.,label=cod:mount]
 rm md5.txt
 
 for (( a=1 ; a<999999999999999 ; a++ ))
@@ -149,7 +200,9 @@ do
 done
 \end{lstlisting}
 
-\verb|tam_bloque_b1.sh|
+\subsection{Tamaño de bloque}
+
+\verb|tam_bloque_b1.sh|: este script usa los ficheros generados por el script \ref{cod:archivos_marcados_b3} para generar uno con un tamaño fijo. Se ha usado para llenar una memoria hasta un punto en concreto, de esta manera sabíamos en que posiciones estábamos grabando el resto de los datos.
 \begin{lstlisting}[caption=Script para generar ficheros de un tamaño concreto,label=cod:tam_bloque_b1]
 df --block-size=KiB | grep sdb1 > tam.txt
 tam_final=$(cut -c56-63 tam.txt)
@@ -225,7 +278,9 @@ done
 echo $total
 \end{lstlisting}
 
-\verb|crear_mismo_tam.sh|
+\subsection{Tabla de nombres}
+
+\verb|crear_mismo_tam.sh|: la finalidad de este script es copiar el número máximo de archivos posibles dentro de una memoria, al prinpio se usó para varias pruebas, pero al final ha sido muy útil a la hora de sacar resultados sobre el funcionamiento de la tabla de nombres.
 \begin{lstlisting}[caption=Script para crear muchos ficheros iguales,label=cod:crear_mismo_tam]
 valor_final=3907388
 ((aux=valor_final/4))
@@ -237,54 +292,4 @@ do
 	echo -e -n "\xAA$a" > /media/B030-FF46/$a.txt
 	echo "vuelta $a"
 done
-\end{lstlisting}
-
-
-\verb|flash_b4.sh|
-\begin{lstlisting}[caption=Última versión de script para flashear una memoria,label=cod:flash_b4]
-ruta="/media/cesar/usb3"
-sdd="sdb1"
-rm stam.txt
-for (( b=0 ; b<9999999999999999999999999 ;b++))
-do
-	let vueltas=$b
-
-for (( a=1 ; a<30 ; a++ ))
-do
-	echo "numero serie ${b}_${a}"
-	echo -e -n "numero serie ${b}_${a}" > datos/${b}_${a}datos.txt
-	for (( c=1 ; c<200 ; c++ ))
-	do
-		echo -e -n "numero serie ${b}_${a}" >> datos/${b}_${a}datos.txt
-	done
-	#cat datos/datos.txt >> datos/${b}_${a}datos.txt
-	#echo -e -n "numero serie ${b}_${a}" >> datos/${b}_${a}datos.txt
-	dd if=datos/${b}_${a}datos.txt of=${ruta}/${b}_${a}datos.txt
-	rm datos/*_*datos.txt
-done
-sudo umount ${ruta}
-echo "umount"
-sudo mount -o gid=1000,uid=1000 /dev/${sdd} ${ruta}
-echo "mount"
-rm -f ${ruta}/*datos.txt
-echo "rm"
-sudo umount ${ruta}
-echo "umount"
-sudo mount -o gid=1000,uid=1000 /dev/${sdd} ${ruta}
-echo "mount"
-
-df --block-size=KB | grep ${sdd} >> stam.txt
-
-frase="vuelta "
-echo "$frase $vueltas" >> stam.txt
-echo " " >> stam.txt
-
-echo "---------------------------------"
-echo "---------------------------------"
-echo "vuelta"
-echo $vueltas
-
-done
-
-exit
 \end{lstlisting}

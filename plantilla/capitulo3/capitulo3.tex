@@ -38,7 +38,7 @@ $ cp datos2/datos1.txt /media/cesar/4F35-D764/datos2.txt
 $ sudo dd if=/dev/sdb1 of=tambloque.iso
 \end{verbatim}
 
-Al copiar dos veces el mismo archivo tuvimos el problema de que no encontrábamos los archivos, así que lo repetimos pero el segundo archivo que copiamos contenía \textit{BB}. Pero nos encontramos con otro problema, \verb|bless| solo encontraba el fichero con los datos \textit{CC}, figura \ref{fig:tambloqueCC}, pero no el que contenía \textit{BB}.
+Al copiar dos veces el mismo archivo tuvimos el problema de que no encontrábamos los archivos, así que lo repetimos pero el segundo archivo que copiamos contenía \textit{BB}. Pero nos encontramos con otro problema, \verb|bless| solo encontraba el fichero con los datos \textit{CC}, figura \ref{fig:tambloqueCC}, pero no el que contenía \textit{BB}. Al ser unos ficheros con tan pocos datos se pueden perder entre el resto de información que contiene el dispositivo. 
 
 \begin{figure}[h!]
 	\centering
@@ -85,7 +85,7 @@ $ cat datosCC.txt >> datosCCCC.txt
 \label{subsec:tablanombres}
 Como hemos visto en la sección anterior, \ref{subsec:tambloque}, hay una parte de la memoria reservada para guardar puramente datos y otra donde está el registro de los ficheros. Esta última es la tabla de nombres.
 
-Lo que hemos hecho para descubrir un poco su funcionamiento es, con el script \ref{cod:crear_mismo_tam}, llenar toda la memoria, ya que en teoría si independientemente del tamaño del fichero, en memoria ocupa 4K, si yo copio \verb|tamañoDeLaMemoria/4| ficheros, la memoria se llena.
+Lo que hemos hecho para descubrir un poco su funcionamiento es, con el script \ref{cod:crear_mismo_tam}, llenar toda la memoria, ya que en teoría si independientemente del tamaño del fichero, en memoria ocupa 4K, si yo copio \verb|tamañoDeLaMemoriaExpresadoEnK / 4| ficheros, la memoria se llena.
 
 Después de ejecutar el script el resultado fue tras crear 32.767 el dispositivo dijo que estaba lleno. De este primer experimento pudimos sacar varias conclusiones:
 
@@ -121,7 +121,7 @@ Después de ejecutar el script el resultado fue tras crear 32.767 el dispositivo 
 \newpage
 \newpage
 
-En las siguientes pruebas mejoramos el script \ref{cod:crear_mismo_tam}, quitándole la extensión ``.txt'' de los ficheros, de esta manera conseguimos que la memoria se llenase con 65535 ficheros:
+En las siguientes pruebas mejoramos el script \ref{cod:crear_mismo_tam}, quitándole la extensión ``.txt'' de los ficheros de esta manera conseguimos que la memoria se llenase con 65535 ficheros:
 \begin{verbatim}
  $ ls | wc -l
 65535
@@ -150,7 +150,7 @@ Como se puede ver en la figura \ref{fig:tablanombres5}, la tabla de nombres está
 
 \subsection{Movimiento de datos entre sectores}
 
-En esta sección partimos de la suposición inicial de que el controlador puede reordenar los datos a distintos sectores para salvaguardar la vida del conjunto, haciendo que todos se usen de manera equitativa. Para averiguar si esto es cierto vamos a realizar varios experimentos:
+En esta sección partimos de la suposición inicial de que el controlador puede reordenar los datos a distintos sectores para salvaguardar la vida del conjunto, haciendo que todos se usen de manera equitativa. Esto se conoce como ``wear levelling'' y suelen usar algoritmos propietarios de empresas, secreto industrial. Para averiguar si esto es cierto vamos a realizar varios experimentos:
 
 En todos ellos es importante que la memoria contenga varios ficheros cuyos datos que comprobaremos si sufren algún tipo de movimiento.
 
@@ -185,6 +185,8 @@ $ md5sum *
 
 En este punto del experimento nos encontramos con una limitación que no fuimos capaces de superar, el tamaño de las imágenes era demasiado grande para poder obtener resultados válidos. Comparar las imágenes con \verb|bless| no era viable, \verb|meld| no conseguía calcular las diferencias de los ficheros de texto con el \textit{dump} de la imagen. Dividimos esos ficheros de texto con \verb|split| pero \verb|meld| no calculaba bien las diferencias con archivos partidos. El comando \verb|cmp -l| conseguía mostrar datos pero no eran legibles ni interpretables. Y el comando \verb|diff -y| si era capaz de calcular todas las diferencias de los ficheros con el \textit{dump} pero no lo hacía bien ya que mostraba cada linea como si fuese una diferencia.
 
+La comparación binaria de grandes cantidades de datos es complicada por las herramientas que proporciona Shell. Desarrollamos un pequeño programa en C que comparaba un binario bit a bit, pero era muy lento y no mostraba información fácilmente entendible. Est punto sería algo interesante a continuar como líneas futuras.
+
 \subsection{Vida útil}
 \label{subsec:experiementoFlash}
 
@@ -218,7 +220,7 @@ vuelta  50356020
 vuelta  50356021
 \end{lstlisting}
 
-Lo que quiere decir, que la capacidad de la memoria no se ha visto afecta después de 50.356.021 ciclos de escritura/borrado. También buscamos errores en el syslog del kernel y este fue el registro que obtuvimos \ref{cod:logkernel}, lo que nos da a suponer que algo del sistema de ficheros o del controlador se ha corrompido, pero la memoria sigue intacta.
+Lo que quiere decir que la capacidad de la memoria no se ha visto afectada después de 50.356.021 ciclos de escritura/borrado. También buscamos errores en el syslog del kernel y este fue el registro que obtuvimos \ref{cod:logkernel}, lo que nos da a suponer que algo del sistema de ficheros o del controlador se ha corrompido, pero la memoria sigue intacta.
 
 \begin{lstlisting}[caption=Log del kernel cuando se produce el error en el sistema de ficheros,label=cod:logkernel]
  kern.log:May 15 19:32:56 donatello kernel: [1699652.958924] FAT: Filesystem error (dev sde1)

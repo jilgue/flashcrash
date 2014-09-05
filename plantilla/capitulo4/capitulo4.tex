@@ -1,15 +1,23 @@
-\chapter{Conclusiones}
+\chapter{Resultados}
+\section{Conclusiones}
 
-
+Los resultados a los que hemos llegado son los siguientes:
+\begin{itemize}
+\item El tamaño de bloque de memoria que impone el sistema de ficheros se mantiene a nivel físico.
+\item El montado y desmontado del dispositivo no genera cambios en él.
+\item Analizar las diferencias entre imágenes \verb|iso| tan grandes como las que hemos manejado no es una tarea trivial.
+\item Son más frágiles los componentes que acompañan a la memoria que la propia memoria.
+\item Es necesario encontrar un procedimiento más eficientes para ``flashear'' memorias que el utilizado en este Proyecto si se quiere continuar con la línea de trabajo.
+\end{itemize}
 
 \section{Líneas futuras}
 
 Este Proyecto deja varias puertas abiertas a futuras invesgitaciones. 
 
-Sería ideal intentar mejorar el script \ref{cod:flash_b4} hasta conseguir los resultados esperados. Uno de los puntos a mejorar es la sobre carga del dispositivo cuando está tanto tiempo encendido, trabajando, se podría añadir tiempos de espera, de esta manera posiblemente las memorias no sufran el fallo del controlador o de componentes internos antes de obtener los datos del deterioro de la memoria.
+Sería ideal intentar mejorar el script \ref{cod:flash_b4} hasta conseguir los resultados esperados. Uno de los puntos a mejorar es la sobrecarga del dispositivo cuando está tanto tiempo encendido, trabajando, se podría añadir tiempos de espera, de esta manera posiblemente las memorias no sufran el fallo del controlador o de componentes internos antes de obtener los datos del deterioro de la memoria.
 
-Otro punto que sería interesante analizar es el moviento de datos entre sectores de forma más eficaz. Esto puede ser usando memorias de menos capacidad, ordenadores con mayor procesado (aunque en este sentido creemos que el fallo de la herramienta \verb|meld| para comprar ficheros tan grandes no depende del ordenador si no del programa en si), o idear otras maneras de comprar imágenes \verb|.iso| y obtener resultados facilmente interpretables.
+Otro punto que sería interesante analizar es el moviento de datos entre sectores de forma más eficaz. Esto puede ser evitado usando memorias de menos capacidad, ordenadores con mayor procesado (aunque en este sentido creemos que el fallo de la herramienta \verb|meld| para comparar ficheros tan grandes no depende del ordenador si no del programa en sí), o idear otras maneras de comparar imágenes \verb|.iso| y obtener resultados facilmente interpretables. En nuestro Proyecto hemos desarrollado un pequeño programa en C que compara bit a bit dos ficheros binarios, pero este no llegó a ser funcional ya que era muy lento y pesado.
 
-Una parte que no nos ha dado tiempo a tratar es la recuperación de datos de una memoria dañada. Más allá de las herramientas de software tipo ..., lo interesante es sacar los datos directamente de la memoria física. Teníamos pensando y realizado un prototipo con una FPGA y un lector de chips de los que se usan para flashear consolas. 
+Una parte que no nos ha dado tiempo a tratar es la recuperación de datos de una memoria dañada. Más allá de las herramientas de software tipo ..., lo interesante es sacar los datos directamente de la memoria física. Teníamos pensando utilizar un prototipo con una FPGA y un lector de chips de los que se usan para flashear consolas que esta en fase de desarrollo.
 
-Por último, y siguiendo esta línea se podría diseñar un grabador con una FPGA de esa manera se quitaría la limitación del controlador y todos los componentes intermedios que pueden fallar antes que la memoria. El incoveniente de este punto es encontrar un dispositivo que aguante mucha carga de trabajo durante mucho tiempo, ya que los lectores de chips que hemos mencionado anteriormente no están pensados para estas aplicaciones.
+Por último, y siguiendo esta línea, se podría diseñar un grabador con una FPGA de esa manera se quitaría la limitación del controlador y todos los componentes intermedios que pueden fallar antes que la memoria. El incoveniente de este punto es encontrar un dispositivo que aguante mucha carga de trabajo durante mucho tiempo, ya que los lectores de chips que hemos mencionado anteriormente no están pensados para estas aplicaciones.
