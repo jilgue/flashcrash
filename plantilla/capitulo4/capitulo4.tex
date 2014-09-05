@@ -1,0 +1,15 @@
+\chapter{Conclusiones}
+
+
+
+\section{Líneas futuras}
+
+Este Proyecto deja varias puertas abiertas a futuras invesgitaciones. 
+
+Sería ideal intentar mejorar el script \ref{cod:flash_b4} hasta conseguir los resultados esperados. Uno de los puntos a mejorar es la sobre carga del dispositivo cuando está tanto tiempo encendido, trabajando, se podría añadir tiempos de espera, de esta manera posiblemente las memorias no sufran el fallo del controlador o de componentes internos antes de obtener los datos del deterioro de la memoria.
+
+Otro punto que sería interesante analizar es el moviento de datos entre sectores de forma más eficaz. Esto puede ser usando memorias de menos capacidad, ordenadores con mayor procesado (aunque en este sentido creemos que el fallo de la herramienta \verb|meld| para comprar ficheros tan grandes no depende del ordenador si no del programa en si), o idear otras maneras de comprar imágenes \verb|.iso| y obtener resultados facilmente interpretables.
+
+Una parte que no nos ha dado tiempo a tratar es la recuperación de datos de una memoria dañada. Más allá de las herramientas de software tipo ..., lo interesante es sacar los datos directamente de la memoria física. Teníamos pensando y realizado un prototipo con una FPGA y un lector de chips de los que se usan para flashear consolas. 
+
+Por último, y siguiendo esta línea se podría diseñar un grabador con una FPGA de esa manera se quitaría la limitación del controlador y todos los componentes intermedios que pueden fallar antes que la memoria. El incoveniente de este punto es encontrar un dispositivo que aguante mucha carga de trabajo durante mucho tiempo, ya que los lectores de chips que hemos mencionado anteriormente no están pensados para estas aplicaciones.
